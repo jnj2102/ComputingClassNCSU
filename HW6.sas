@@ -91,6 +91,7 @@ model y = x x*x x*x*x;
 run;
 
 data chem; set chem;
+obs = _N_;
 dfe = 27;
 cooksd1=finv(.5, 3, dfe);
 covlo = 1 - 3 * 3/30;
@@ -105,6 +106,26 @@ proc print data = chem; run;
 
 proc glm data = chem plots(unpack)=Diagnostics (label unpack);
 model y = x x*x x*x*x/ noint;
+output out=out cookd=cookd dffits=diffits covratio=covratio predicted=fit residual=resid r=e student=r rstudent=rstar h=v;
+run;
+
+
+proc sgplot data=out;
+scatter y=covratio x=obs /markerchar=obs;
+refline 0.7;
+refline 1.3;
+run;
+
+
+proc sgplot data=out;
+scatter y=diffits x=obs/markerchar=obs;
+refline 0.63;
+run;
+
+
+proc sgplot data=out;
+scatter y=v x=obs/markerchar=obs;
+refline 0.2;
 run;
 
 
