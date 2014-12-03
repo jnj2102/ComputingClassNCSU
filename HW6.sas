@@ -61,3 +61,19 @@ proc print data = corn; run;
 proc reg data = corn;
 model y = x_1 x_2 x_3 x_4 x_5;
 run;
+
+
+proc transreg data=corn;
+title2 height=.15in "Box-Cox Transformation";
+model boxcox( y / parameter=0 geometricmean alpha=.05 convenient
+lambda=-2 to -1 by .25 -.9 to 1 by .1 1.25 to 2 by .25) = identity(x_1 x_2 x_3 x_4 x_5);
+run;
+
+data corn2; set corn;
+ly = log(y);
+run;
+
+
+proc reg data = corn2;
+model ly = x_1 x_2 x_3 x_4 x_5;
+run;
