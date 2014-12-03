@@ -77,3 +77,15 @@ run;
 proc reg data = corn2;
 model ly = x_1 x_2 x_3 x_4 x_5;
 run;
+
+
+data chem;
+	infile "chemresp.dta";
+	input num x y ;
+	run;
+proc print data=chem;
+run;
+
+proc glm data = chem;
+model y = x x*x x*x*x;
+run;
