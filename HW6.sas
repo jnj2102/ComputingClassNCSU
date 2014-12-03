@@ -57,3 +57,7 @@ x_5 = .;
 run;
 
 proc print data = corn; run;
+
+proc reg data = corn;
+model y = x_1 x_2 x_3 x_4 x_5;
+run;
