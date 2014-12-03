@@ -89,3 +89,22 @@ run;
 proc glm data = chem;
 model y = x x*x x*x*x;
 run;
+
+data chem; set chem;
+dfe = 27;
+cooksd1=finv(.5, 3, dfe);
+covlo = 1 - 3 * 3/30;
+covhi = 1 + 3 * 3/30;
+dfbetas = 2/sqrt(30);
+dffits = 2*sqrt(3/30);
+bonf = tinv(1-.05/(2*30), dfe -1);
+xout = 2*3/30;
+run;
+
+proc print data = chem; run;
+
+proc glm data = chem plots(unpack)=Diagnostics (label unpack);
+model y = x x*x x*x*x/ noint;
+run;
+
+
