@@ -303,9 +303,6 @@ d <- list(2, 5, 10, 20)
 
 names(d) <- c("2", "5", "10", "20")
 
-#Different combinations for factors
-
-#treat <- expand.grid(I, d) 
 
 param <- list()
 
@@ -345,7 +342,7 @@ for (i in names(I)){
     
     count <- list(generate(S, I[[i]], d[[j]])$counts)
     
-    name <- paste('item:', (I[[i]] - 1) * 3 + (d[[j]] - 1) * 11, sep='')
+    name <- paste('item:', (I[[i]] - 1) * 3 + (d[[j]] - 1) * 11, sep = '')
     
     biglist.param[[name]] <- param
     
