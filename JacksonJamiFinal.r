@@ -334,6 +334,8 @@ biglist.param <- list()
 
 biglist.count <- list()
 
+MLE.d <- list()
+
 for (i in names(I)){
   for (j in names(d)){
  #   print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
@@ -349,9 +351,18 @@ for (i in names(I)){
     biglist.param[[name]] <- param
     
     biglist.count[[name]] <- count
+    
+    df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count[name]), 
+                                  nrow = S * I[[i]], byrow = F)))
+    
+    MLE.d[name] <- list(colMeans(df.MLE.count)/N)
  
     
   }
+ #output
+ out <- list(mles = MLE.d)
+ return(out)
+ 
 }  
   
 
