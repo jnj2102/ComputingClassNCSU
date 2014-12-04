@@ -485,24 +485,32 @@ for (i in names(I)){
     
     meanEB <- list(generate(S, I[[i]], d[[j]])$mean.EB)
     
-    count <- list(generate(S, I[[i]], d[[j]])$counts)
+    meanMLE <- list(generate(S, I[[i]], d[[j]])$mean.MLE)
     
     name <- paste('item:', (I[[i]] - 1) * 3 + (d[[j]] - 1) * 11, sep = '')
     
-    biglist.param[[name]] <- param
+    biglist.mean.EB[[name]] <- meanEB
     
-    biglist.count[[name]] <- count
+    biglist.mean.MLE[[name]] <- meanMLE
     
-    df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count[name]), 
+    seMLE <- list(generate(S, I[[i]], d[[j]])$se.MLE)
+    
+    biglist.se.MLE[[name]] <- seMLE
+    
+    seEB <- list(generate(S, I[[i]], d[[j]])$se.EB)
+    
+    biglist.se.EB[[name]] <- seEB
+    
+  #  df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count[name]), 
                                   nrow = S * I[[i]], byrow = F)))
     
-    MLE[name] <- list(colMeans(df.MLE.count)/N)
+   # MLE[name] <- list(colMeans(df.MLE.count)/N)
     
     #find the sample variance of the MLEs
     
-    MLE.var <- colVars(df.MLE.count/N)
+    #MLE.var <- colVars(df.MLE.count/N)
     
-    MLE.se[name] <- list(sqrt(MLE.var/S))
+    #MLE.se[name] <- list(sqrt(MLE.var/S))
      
     #output
     MLE
