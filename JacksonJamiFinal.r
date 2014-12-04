@@ -351,6 +351,7 @@ library(matrixStats)
 # S <- 500
 # S <- 1000
 # S <- 2000 
+# S <- 3000
 
 #Based on all standard errors being <= 0.005, I choose S = 
 
