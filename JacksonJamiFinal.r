@@ -336,7 +336,9 @@ biglist.count <- list()
 
 for (i in names(I)){
   for (j in names(d)){
+    print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
     set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
+
     
     param <- list(generate(S, I[[i]], d[[j]])$parameters)
     
@@ -353,7 +355,19 @@ for (i in names(I)){
 }  
   
 
-
+#double check that I can reproduce my results
+#I can I run it exactly as my code is
+#   i <- "10"
+# I[[i]]
+#  j <- "2"
+# d[[j]]
+#  set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
+# (I[[i]] - 1) * 3 + (d[[j]] - 1) * 11
+#  38
+# param <- list(generate(S, I[[i]], d[[j]])$parameters)
+#  param
+#  count <- list(generate(S, I[[i]], d[[j]])$counts)
+#  count
 
 
                
