@@ -5,7 +5,7 @@
 
 rm(list=ls())
 
-#
+
 #' Density of Dirichlet-multinomial
 #'
 #' \code{ddirmult} evaluates the Dirichlet-multinomial density
@@ -67,6 +67,7 @@ ddirmult <- function(x, alpha, log = FALSE) {
   else
     return(exp(logl))
 }
+
 
 #' MLE of Dirichlet-multinomial distribution
 #'
