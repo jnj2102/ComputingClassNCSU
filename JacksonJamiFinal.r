@@ -325,20 +325,18 @@ library(matrixStats)
 
 generate <- function(S, I, d) {
   
-  dat.param <- NULL
+  dat.MLE <- NULL
   
-  dat.counts <- NULL
+  dat.EB <- NULL
   
   for (k in 1 : S) {
 
     multi.param <- matrix(runif(I * d, min = 0, max = 1), nrow = I, 
                         ncol = d)
   
-  #I need to normalize the matrix of parameters 
+  #I need to normalize the matrix of parameters.  This is my "TRUTH"
   
   final.multi.param <- multi.param/rowSums(multi.param)
-  
- # dat.param <- rbind(dat.param, final.multi.param)
   
   
   matrix.counts <- t(apply(final.multi.param, 1, 
@@ -347,7 +345,7 @@ generate <- function(S, I, d) {
  
  #find the MLE
  
- MLE <- matrix.counts/N
+ pi.MLE <- matrix.counts/N
  
  #Estimate the Dich-Mult parameter
  
@@ -362,7 +360,22 @@ generate <- function(S, I, d) {
   
  pi.EB <- (matrix.counts + alpha.matrix) * 1/(N + batchsize.alpha)
  
-  #dat.counts <- rbind(dat.counts, matrix.counts)
+ #Get the Estimation error for MLE
+ 
+   ERR.MLE <- sum(rowSums(abs(pi.MLE - final.multi.param))) * 1/(2 * I)
+ 
+ #Get the estimation error for EB
+ 
+   ERR.EB <- sum(rowSums(abs(pi.EB - final.multi.param))) * 1/(2 * I)
+ 
+ #Now I can combine each of these estimation errors for each replicate
+ #because I want to summarize the estimation errors, not anything else.
+ #I'm left with one big column vector after S replicates for ERR MLE and 
+ #ERR EB
+ 
+  dat.EB <- rbind(dat.EB, ERR.EB)
+  dat.MLE <- rbind(dat.MLE, ERR.MLE)
+ 
   
 
 }
