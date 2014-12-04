@@ -292,14 +292,14 @@ return(out)
 
 #Number of populations
 
-I <- list(10, 20, 50, 100)
+I <- c(10, 20, 50, 100)
 
 #names(I) <- c("10", "20", "50", "100")
 
 
 #Number of categories
 
-d <- list(2, 5, 10, 20)
+d <- c(2, 5, 10, 20)
 
 #names(d) <- c("2", "5", "10", "20")
 
@@ -311,8 +311,8 @@ param <- list()
 
 count <- list()
 
-for (i in 1 : I[[i]]){
-  for (j in d[[1]] : d[[j]]){
+for (i in 1 : I){
+  for (j in d){
     set.seed((i - 1) * I + (j - 1) * d)
     
     param <- generate(S, I, d)$parameters
