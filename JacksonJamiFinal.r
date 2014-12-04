@@ -390,9 +390,9 @@ lhs  <- paste("cat.vec", 1 : n, sep = "")
  
 rhs  <- paste("a[[",1 : n,"]]", sep = "")
 
-eq   <- paste(paste(lhs, rhs, sep="<-"), collapse=";")
+eq   <- paste(paste(lhs, rhs, sep = "<-"), collapse = ";")
 
-eval(parse(text=eq))
+eval(parse(text = eq))
  
 
 
