@@ -333,20 +333,25 @@ count <- list()
 #     }
 # 
 
+biglist <- list()
 
 for (i in names(I)){
   for (j in names(d)){
     set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
     
-    param <- generate(S, I[[i]], d[[j]])$parameters
+    param <- list(generate(S, I[[i]], d[[j]])$parameters)
+    
+    name <- paste('item:',I[[i]] + d[[j]],sep='')
+    
+    biglist[[name]] <- param
     
    # count[I[[i]], d[[j]]] <- generate(S, I[[i]], d[[j]])$counts
     
   # output <- list(list(param), list(count)) 
     
-output <- cbind(param)
+#output <- cbind(param)
     
-   # df <- do.call("rbind", param)
+ #   df <- do.call("rbind", param)
     
 #    df2 <- do.call("rbind", count)
     
