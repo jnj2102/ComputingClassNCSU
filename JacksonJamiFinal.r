@@ -308,7 +308,7 @@ for (i in 1 : I){
   for (j in 1 : d){
     set.seed((i - 1) * I + (j - 1) * d)
     
-    ans[[i], [j]] <- generate(S, I, d)
+    ans[i][j] <- generate(S, I, d)
     
   }
 }  
