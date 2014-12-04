@@ -328,7 +328,7 @@ for (i in names(I)){
     
     count <- generate(S, I[[i]], d[[j]])$counts
     
-   output <- list(list(param), list(count)) 
+  # output <- list(list(param), list(count)) 
     
 
     
