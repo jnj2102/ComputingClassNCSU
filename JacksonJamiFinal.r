@@ -342,6 +342,18 @@ MLE.se <- list()
 
 library(matrixStats)
 
+
+#Figure out what number the S should be based on the standard errors of the
+#MLE by running the below code with different values of S
+
+# S <- 3
+# S <- 100
+# S <- 500
+# S <- 1000
+# S <- 2000 
+
+#Based on all standard errors being <= 0.005, I choose S = 
+
 for (i in names(I)){
   for (j in names(d)){
  #   print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
@@ -381,12 +393,6 @@ for (i in names(I)){
  
 }  
   
-#Figure out what number the S should be based on the standard errors of the MLE
-
-S <- 3
-S <- 100
-S <- 500
-S <- 1000
 
 
 
