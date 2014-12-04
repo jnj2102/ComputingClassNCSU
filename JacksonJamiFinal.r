@@ -370,13 +370,20 @@ for (i in names(I)){
 #  count
 
 
+#create a (fake) function to calculate the MLE of the multinomial, the mean MLE
+#the SE of MLE and the ERR of MLE. It takes in the list, converts it to 
+#a dataframe, and then does the calculations. I'm adding this to my
+#generate function
+
+MLE <- function(S, biglist.count["item:38"], I[[i]]) {
+               
+  df.MLE.count <- data.frame(matrix(unlist(biglist.count["item:38"]), 
+                          nrow = S*I[[i]], byrow = T))         
                
                
                
                
-               
-               
-               
+}               
                
 
 sim.matrices <- apply(treat.dataf, 1,
