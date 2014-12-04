@@ -380,30 +380,30 @@ MLE <- function(S, biglist.count["item:38"], I[[i]], N) {
 df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count["item:38"]), 
                           nrow = S * I[[i]], byrow = F)))
 
+MLE.d <- colMeans(df.MLE.count)/N
 
-
- a <-  split(df.MLE.count, col(df.MLE.count))
- 
- n <- dim(df.MLE.count)[2]
-
-lhs  <- paste("cat.vec", 1 : n, sep = "")
- 
-rhs  <- paste("a[[",1 : n,"]]", sep = "")
-
-eq   <- paste(paste(lhs, rhs, sep = "<-"), collapse = ";")
-
-eval(parse(text = eq))
+#  a <-  split(df.MLE.count, col(df.MLE.count))
+#  
+#  n <- dim(df.MLE.count)[2]
+# 
+# lhs  <- paste("cat.vec", 1 : n, sep = "")
+#  
+# rhs  <- paste("a[[",1 : n,"]]", sep = "")
+# 
+# eq   <- paste(paste(lhs, rhs, sep = "<-"), collapse = ";")
+# 
+# eval(parse(text = eq))
  
 #playing around
 
-vec <- rep(1, 30)
-lh <- paste("cbind(vec")
-rh <- paste("a[[",1:n,"]])", sep = "")
-eqn <- paste(paste(lh, rh, sep = ","), collapse = ";")
-eval(parse(text = eqn))
+# vec <- rep(1, 30)
+# lh <- paste("cbind(vec")
+# rh <- paste("a[[",1:n,"]])", sep = "")
+# eqn <- paste(paste(lh, rh, sep = ","), collapse = ";")
+# eval(parse(text = eqn))
 
   
-  MLE.i <- rowSums(df.MLE.count)/N       
+  #MLE.i <- rowSums(df.MLE.count)/N       
   
                
                
