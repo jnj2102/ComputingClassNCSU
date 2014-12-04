@@ -386,6 +386,12 @@ for (i in 1 : dim(df.MLE.count)[2]) {
 
  a <-  split(df.MLE.count, col(df.MLE.count))
  
+ vals <- rnorm(3)
+ n    <- length(vals)
+ lhs  <- paste("a",    1:n,     sep="")
+ rhs  <- paste("vals[",1:n,"]", sep="")
+ eq   <- paste(paste(lhs, rhs, sep="<-"), collapse=";")
+ 
  output.matrix[, i] <- as.vector(a[[i]])
 
 }
