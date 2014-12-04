@@ -351,9 +351,17 @@ generate <- function(S, I, d) {
  
  #Estimate the Dich-Mult parameter
  
- dirmult.alpha <- dirmultfit(matrix.counts, tolfun = 1e-6,
-                             maxiters = 1000, display = FALSE)
+ dirmult.alpha <- dirmultfit(matrix.counts, algorithm = 'Newton',
+                 tolfun = 1e-6, maxiters = 1000, display = FALSE)$estimate
+ 
+ batchsize.alpha <- sum(dirmult.alpha)
+ 
+ alpha.matrix <- t(replicate(dim(matrix.counts)[1], dirmult.alpha))
+ 
+ #Get the empirical Bayes estimate
   
+ pi.EB <- (matrix.counts + alpha.matrix) * 1/(N + batchsize.alpha)
+ 
   #dat.counts <- rbind(dat.counts, matrix.counts)
   
 
