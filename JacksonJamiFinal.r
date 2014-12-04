@@ -599,8 +599,23 @@ rho <- list(0, 0.25, 0.5, 0.9)
 
 names(d) <- c("0", "0.25", "0.5", "0.9")
 
-
+#create the sigma matrix which is a function of rho
 autocorr.mat <- function(p = 100, rho = 0.9) {
   mat <- diag(p)
   return(rho^abs(row(mat)-col(mat)))
 }
+
+#here is how I can generate the X matrix
+out <- mvrnorm(50, mu = c(0,0), Sigma = matrix(c(1,0.56,0.56,1), ncol = 2),
+                               empirical = TRUE)
+
+#then find the density of y based on the x matrix but I need to specify
+#my true betas here and my noise here too
+ y <- dmvnorm(x, mean, sigma, log=FALSE)
+
+
+#then the Least squares estimate of beta is found by
+
+ls <- lm(y ~ out, data)
+
+betas.ls <- ls$coefficients
