@@ -313,11 +313,11 @@ count <- list()
 
 for (i in names(I)){
   for (j in names(d)){
-    set.seed(([[i]] - 1) * I + ([[j]] - 1) * d)
+    set.seed((I[[i]] - 1) * I + (d[[j]] - 1) * d)
     
-    param <- generate(S, [[i]], [[j]])$parameters
+    param <- generate(S, I[[i]], d[[j]])$parameters
     
-    count <- generate(S, [[i]], [[j]])$counts
+    count <- generate(S, I[[i]], d[[j]])$counts
     
    output <- list(list(param), list(count)) 
     
