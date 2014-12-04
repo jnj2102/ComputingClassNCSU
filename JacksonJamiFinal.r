@@ -592,6 +592,7 @@ n <- list(50, 100, 200, 400)
 
 names(I) <- c("50", "100", "200", "400")
 
+library(MASS)
 
 #Correlation
 
@@ -611,11 +612,15 @@ out <- mvrnorm(50, mu = c(0,0), Sigma = matrix(c(1,0.56,0.56,1), ncol = 2),
 
 #then find the density of y based on the x matrix but I need to specify
 #my true betas here and my noise here too
+
  y <- dmvnorm(x, mean, sigma, log=FALSE)
 
 
-#then the Least squares estimate of beta is found by
+#then the Least squares estimate of betas is found by
 
-ls <- lm(y ~ out, data)
+betas.ls <- lm(y ~ out, data = data)$coefficients
 
-betas.ls <- ls$coefficients
+
+#the ridge regression estimate of betas is found by
+
+ridge <- lm.ridge()
