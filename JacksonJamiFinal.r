@@ -394,7 +394,13 @@ eq   <- paste(paste(lhs, rhs, sep = "<-"), collapse = ";")
 
 eval(parse(text = eq))
  
+#playing around
 
+vec <- rep(1, 30)
+lh <- paste("cbind(vec")
+rh <- paste("a[[",1:n,"]])", sep = "")
+eqn <- paste(paste(lh, rh, sep = ","), collapse = ";")
+eval(cbind(text = eqn))
 
   
   MLE.i <- rowSums(df.MLE.count)/N       
