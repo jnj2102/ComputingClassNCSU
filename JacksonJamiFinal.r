@@ -320,7 +320,7 @@ dirmultfit <- function(X, weights = NULL, alpha0 = NULL, algorithm = 'Newton',
 #this function will take in a fixed I and a fixed d and fixed S
 #it will output one matrix of counts I x d and one matrix of parameters I x d
 
-library(matrixStats)
+
 
 
 generate <- function(S, I, d) {
@@ -380,9 +380,23 @@ generate <- function(S, I, d) {
 
 }
 
-#output
-out <- list(ERR.EB = dat.EB, ERR.MLE = dat.MLE)
-return(out)
+#find the mean estimation error for EB and MLE
+
+mean.err.EB <- mean(dat.EB)
+
+mean.err.MLE <- mean(dat.MLE)
+
+#find the standard error of the mean estimation error for EB and MLE
+
+se.mean.err.EB <- sqrt(var(dat.EB)/S)
+
+se.mean.err.MLE <- sqrt(var(dat.MLE)/S)
+
+
+#output the means and standard errors because this is my function
+list(mean.EB = mean.err.EB, mean.MLE = mean.err.MLE, 
+     se.EB = se.mean.err.EB, se.MLE = se.mean.err.MLE)
+
 
 }
 
@@ -454,6 +468,8 @@ MLE.se <- list()
 #Based on all standard errors being <= 0.005, I choose S = 3000
 
 S <- 3000
+
+#library(matrixStats)
 
 for (i in names(I)){
   for (j in names(d)){
