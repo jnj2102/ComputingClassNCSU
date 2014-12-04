@@ -381,7 +381,7 @@ generate <- function(S, I, d) {
 }
 
 #output
-out <- list(parameters = dat.param, counts = dat.counts)
+out <- list(ERR.EB = dat.EB, ERR.MLE = dat.MLE)
 return(out)
 
 }
