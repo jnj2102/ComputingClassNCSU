@@ -384,14 +384,17 @@ df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count["item:38"]),
 
  a <-  split(df.MLE.count, col(df.MLE.count))
  
+ n <- dim(df.MLE.count)[2]
+
+lhs  <- paste("cat.vec", 1 : n, sep = "")
  
+rhs  <- paste("a[[",1 : n,"]]", sep = "")
+
+eq   <- paste(paste(lhs, rhs, sep="<-"), collapse=";")
+
+eval(parse(text=eq))
  
- vals <- rnorm(3)
- n    <- length(vals)
- lhs  <- paste("a",    1:n,     sep="")
- rhs  <- paste("vals[",1:n,"]", sep="")
- eq   <- paste(paste(lhs, rhs, sep="<-"), collapse=";")
- 
+
 
   
   MLE.i <- rowSums(df.MLE.count)/N       
