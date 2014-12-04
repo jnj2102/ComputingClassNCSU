@@ -513,9 +513,11 @@ for (i in names(I)){
     #MLE.se[name] <- list(sqrt(MLE.var/S))
      
     #output
-    MLE
-    
-    MLE.se
+  biglist.mean.EB
+  biglist.mean.MLE
+  biglist.se.EB
+  biglist.se.MLE
+
     
     
 
