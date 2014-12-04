@@ -319,6 +319,20 @@ count <- list()
 #              print(((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
 #          }
 # }
+# 
+#  for (i in names(I)){
+#     
+#               print(I[[i]])
+# 
+#  }
+# 
+# 
+#   for (j in names(d)){
+# 
+#      print(d[[j]])
+#     }
+# 
+
 
 for (i in names(I)){
   for (j in names(d)){
