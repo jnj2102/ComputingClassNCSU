@@ -310,7 +310,7 @@ for (i in 1 : I){
   for (j in 1 : d){
     set.seed((i - 1) * I + (j - 1) * d)
     
-    param[i][j] <- generate(S, I, d)$parameters
+    param <- generate(S, I, d)$parameters
     
  #   count[i][j] <- generate(S, I, d)$counts
     
