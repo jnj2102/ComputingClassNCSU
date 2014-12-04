@@ -338,13 +338,13 @@ for (i in names(I)){
   for (j in names(d)){
     set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
     
-    param[i, j] <- generate(S, I[[i]], d[[j]])$parameters
+    param <- generate(S, I[[i]], d[[j]])$parameters
     
-    count[i, j] <- generate(S, I[[i]], d[[j]])$counts
+   # count[I[[i]], d[[j]]] <- generate(S, I[[i]], d[[j]])$counts
     
   # output <- list(list(param), list(count)) 
     
-
+output <- cbind(param)
     
    # df <- do.call("rbind", param)
     
