@@ -254,6 +254,9 @@ list(estimate = alphaHat, se = se, maximum = loglIter, iterations = iter,
 #this function will take in a fixed I and a fixed d and fixed S
 #it will output one matrix of counts I x d and one matrix of parameters I x d
 
+library(matrixStats)
+
+
 generate <- function(S, I, d) {
   
   dat.param <- NULL
@@ -269,14 +272,18 @@ generate <- function(S, I, d) {
   
   final.multi.param <- multi.param/rowSums(multi.param)
   
-  dat.param <- rbind(dat.param, final.multi.param)
+ # dat.param <- rbind(dat.param, final.multi.param)
   
   
   matrix.counts <- t(apply(final.multi.param, 1, 
                            function(x) rmultinom(n = 1, size = N,
                                                  prob = x)))
+ 
+ #find the MLE
+ 
+ MLE <- matrix.counts/N
   
-  dat.counts <- rbind(dat.counts, matrix.counts)
+  #dat.counts <- rbind(dat.counts, matrix.counts)
   
 
 }
@@ -340,7 +347,6 @@ MLE <- list()
 
 MLE.se <- list()
 
-library(matrixStats)
 
 
 #Figure out what number the S should be based on the standard errors of the
