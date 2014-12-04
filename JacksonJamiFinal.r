@@ -415,9 +415,9 @@ d <- list(2, 5, 10, 20)
 names(d) <- c("2", "5", "10", "20")
 
 
-param <- list()
+#param <- list()
 
-count <- list()
+#count <- list()
 
 #Code to make sure no combo has the same seed number.  There are no 
 #duplicates
@@ -473,7 +473,7 @@ biglist.se.EB <- list()
 
 #Based on all standard errors being <= 0.005, I choose S = 3000
 
-S <- 3000
+#S <- 3000
 
 #library(matrixStats)
 
@@ -502,7 +502,7 @@ for (i in names(I)){
     biglist.se.EB[[name]] <- seEB
     
   #  df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count[name]), 
-                                  nrow = S * I[[i]], byrow = F)))
+                      #            nrow = S * I[[i]], byrow = F)))
     
    # MLE[name] <- list(colMeans(df.MLE.count)/N)
     
