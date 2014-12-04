@@ -400,7 +400,7 @@ vec <- rep(1, 30)
 lh <- paste("cbind(vec")
 rh <- paste("a[[",1:n,"]])", sep = "")
 eqn <- paste(paste(lh, rh, sep = ","), collapse = ";")
-eval(cbind(text = eqn))
+eval(parse(text = eqn))
 
   
   MLE.i <- rowSums(df.MLE.count)/N       
