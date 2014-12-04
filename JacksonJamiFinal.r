@@ -68,8 +68,6 @@ ddirmult <- function(x, alpha, log = FALSE) {
     return(exp(logl))
 }
 
-
-
 #' MLE of Dirichlet-multinomial distribution
 #'
 #' \code{dirmultfit} finds the MLE of Dirichlet-multinomial
@@ -77,7 +75,7 @@ ddirmult <- function(x, alpha, log = FALSE) {
 #' @param X an n-by-d matrix of counts
 #' @param weights an n vector of observation weights
 #' @param alpha0 an n vector of starting point
-#' @param algorithm optimizatio algorithm: 'MM'
+#' @param algorithm optimizatio algorithm: 'Newton' (default) | 'MM'
 #' @param tolfun convergence tolerance in log-likelihood values
 #' @param maxiters maximum number of iterations
 #' @param display verbose mode (TRUE) or not (FALSE)
@@ -90,7 +88,7 @@ ddirmult <- function(x, alpha, log = FALSE) {
 #'  obsinfo observed information at MLE
 #'  obsinfoInv inverse of observed information at MLE
 #' @seealso
-dirmultfit <- function(X, weights = NULL, alpha0 = NULL,
+dirmultfit <- function(X, weights = NULL, alpha0 = NULL, algorithm = 'Newton',
                        tolfun = 1e-6, maxiters = 1000, display = FALSE) {
   
   # check observation weights
@@ -154,96 +152,163 @@ dirmultfit <- function(X, weights = NULL, alpha0 = NULL,
   
   if (maxiters == 1) iter <- 1
   else {
-
-# pre-compute some auxillary variables based on data
-# scts: a matrix of size n-by-max(data)
-# scts[j,k] is # data points with j-th component > k-1
-# rcts: a vector of size max(m)
-# rcts[k] is # data points with batch size > k-1
-Sj <- function(xj, kvec, weight) 
-  Sj <- colSums(weight * outer(xj, kvec, ">"))
-scts <- apply(data, 2, Sj, kvec = 0:(max(data) - 1), weight = weights)
-rcts <- Sj(m, kvec = 0:(max(m) - 1), weight = weights)
-
-##----------------------------------------##
-## MM loop
-for (iter in 2:maxiters) {
+    ##----------------------------------------##
+    ## The Newton loop
+    if (algorithm == "Newton") {
+      
+      # set backtrack max iterations
+      backtrackMaxiters <- 10
+      
+      for (iter in 2:maxiters) {
+        
+        # score vector
+        alphaMat <- matrix(alphaHat, nrow = N, ncol = d, byrow = TRUE)
+        score <- colSums(weights * digamma(data + alphaMat)) - 
+          weightsum * (digamma(alphaHat) - digamma(alphaSum)) -
+          sum(weights * digamma(alphaSum + m))
+        # observed info. matrix = diag(obsinfoDvec) - obsinfoC
+        obsinfoDvec <- weightsum * trigamma(alphaHat) - 
+          colSums(weights * trigamma(data + alphaMat))
+        obsinfoDvecInv <- 1 / obsinfoDvec
+        obsinfoC <- weightsum * trigamma(alphaSum) - 
+          sum(weights * trigamma(m + alphaSum))
+        # shrink c if necessary to make obs. info. pos def
+        if (obsinfoC * sum(obsinfoDvecInv) >= 1) {
+          if (display) print("shrink c")
+          obsinfoC <- 0.95 / sum(obsinfoDvecInv)
+        }
+        
+        # compute Newton direction
+        newtondir <- obsinfoDvecInv * score
+        newtondir <- newtondir + 
+          (sum(newtondir) / (1 / obsinfoC - sum(obsinfoDvecInv))) * 
+          obsinfoDvecInv
+        
+        # line search by step halving
+        if (any(newtondir < 0)) {
+          # make sure Newton iterate always lands within boundary
+          stepsize <- min(- alphaHat[newtondir < 0] / newtondir[newtondir < 0])
+          stepsize <- min(0.95 * stepsize, 1)
+        } else {
+          stepsize <- 1
+        }
+        for (btiter in 1:backtrackMaxiters) {
+          alphaNew <- alphaHat + stepsize * newtondir
+          loglNew <- sum(weights * ddirmult(data, alphaNew, log = TRUE))
+          # line search successful if improving log-L
+          if (loglNew > loglIter) break
+          else if (btiter == backtrackMaxiters) {
+            warning("line search failed")
+          } else {
+            if (display) print("step halving")
+            stepsize <- stepsize / 2
+          }
+        }
+        alphaHat <- alphaNew
+        alphaSum <- sum(alphaHat)
+        loglOld <- loglIter
+        loglIter <- loglNew
+        
+        # Print the iterate log-like if requested 
+        if (display)
+          print(paste("iteration ", iter, ", logL = ", loglIter, sep=""))
+        
+        # check convergence criterion
+        if (abs(loglIter - loglOld) < tolfun * (abs(loglOld) + 1)) break
+      } 
+      ##----------------------------------------##
+      ## End of Newton loop
+      
+    } else if (algorithm == "MM") {
+      
+      # pre-compute some auxillary variables based on data
+      # scts: a matrix of size n-by-max(data)
+      # scts[j,k] is # data points with j-th component > k-1
+      # rcts: a vector of size max(m)
+      # rcts[k] is # data points with batch size > k-1
+      Sj <- function(xj, kvec, weight) 
+        Sj <- colSums(weight * outer(xj, kvec, ">"))
+      scts <- apply(data, 2, Sj, kvec = 0:(max(data) - 1), weight = weights)
+      rcts <- Sj(m, kvec = 0:(max(m) - 1), weight = weights)
+      
+      ##----------------------------------------##
+      ## MM loop
+      for (iter in 2:maxiters) {
+        
+        # MM update
+        num <- colSums(scts / (outer(0:(max(data) - 1), alphaHat, "+")))
+        den <- sum(rcts / (sum(alphaHat) + (0:(max(m) - 1))))
+        alphaHat <- alphaHat * num / den
+        
+        # log-likelihood at new iterate
+        loglOld <- loglIter
+        loglIter <- sum(weights * ddirmult(data, alphaHat, log = TRUE))
+        
+        # Print the iterate log-like if requested
+        if(display)
+          print(paste("iteration ", iter, ", logL = ", loglIter, sep=""))
+        
+        # check convergence criterion
+        if (abs(loglIter - loglOld) < tolfun * (abs(loglOld) + 1)) 
+          break          
+        
+      }
+      ##----------------------------------------##
+      ## End of MM loop
+      
+    } else {
+      stop("unknown algorithm option")
+    }
+  }
   
-  # MM update
-  num <- colSums(scts / (outer(0:(max(data) - 1), alphaHat, "+")))
-  den <- sum(rcts / (sum(alphaHat) + (0:(max(m) - 1))))
-  alphaHat <- alphaHat * num / den
-  
-  # log-likelihood at new iterate
-  loglOld <- loglIter
-  loglIter <- sum(weights * ddirmult(data, alphaHat, log = TRUE))
-  
-  # Print the iterate log-like if requested
-  if(display)
-    print(paste("iteration ", iter, ", logL = ", loglIter, sep=""))
-  
-  # check convergence criterion
-  if (abs(loglIter - loglOld) < tolfun * (abs(loglOld) + 1)) 
-    break          
-  
-}
-##----------------------------------------##
-## End of MM loop
-
-} else {
-  stop("unknown algorithm option")
-}
-}
-
-# score, i.e., gradient
-alphaMat <- matrix(alphaHat, nrow = N, ncol = d, byrow = TRUE)
-score <- 
-  colSums(weights * digamma(data + alphaMat)) - 
-  weightsum * (digamma(alphaHat) - digamma(alphaSum)) -
-  sum(weights * digamma(alphaSum + m))
-# diagonal part of the observed information matrix
-obsinfoDvec <- weightsum * trigamma(alphaHat) - 
-  colSums(weights * trigamma(data + alphaMat))
-obsinfoDvecInv <- 1 / obsinfoDvec
-# the constant c in the observed information matrix
-obsinfoC <- weightsum * trigamma(alphaSum) - 
-  sum(weights * trigamma(m + alphaSum))
-# compute standard errors
-obsinfo <- diag(obsinfoDvec) - obsinfoC
-obsinfoInv <- diag(obsinfoDvecInv) + 
-  outer(obsinfoDvecInv, obsinfoDvecInv) / (1 / obsinfoC - sum(obsinfoDvecInv))
-se <- sqrt(diag(obsinfoInv))
-
-# restore to original data size
-if (any(csum == 0)) {
-  colidx <- (csum != 0)
-  # parameter estimate
-  tmp <- alphaHat
-  alphaHat <- rep(0, ncol(X))
-  alphaHat[colidx] <- tmp
-  # gradient/score vector
-  tmp <- score
-  score <- rep(0, ncol(X))
-  score[colidx] <- tmp
-  score[!colidx] <- weightsum * digamma(alphaSum) - 
+  # score, i.e., gradient
+  alphaMat <- matrix(alphaHat, nrow = N, ncol = d, byrow = TRUE)
+  score <- 
+    colSums(weights * digamma(data + alphaMat)) - 
+    weightsum * (digamma(alphaHat) - digamma(alphaSum)) -
     sum(weights * digamma(alphaSum + m))
-  # obs info matrix
-  tmp <- obsinfo
-  obsinfo <- matrix(0, ncol(X), ncol(X))
-  obsinfo[colidx, colidx] <- tmp
-  obsinfo[!colidx, ] <- - obsinfoC
-  obsinfo[, !colidx] <- - obsinfoC
-  # inverse of obs info matrix
-  tmp <- obsinfoInv
-  obsinfoInv <- matrix(0, ncol(X), ncol(X))
-  obsinfoInv[colidx, colidx] <- tmp
+  # diagonal part of the observed information matrix
+  obsinfoDvec <- weightsum * trigamma(alphaHat) - 
+    colSums(weights * trigamma(data + alphaMat))
+  obsinfoDvecInv <- 1 / obsinfoDvec
+  # the constant c in the observed information matrix
+  obsinfoC <- weightsum * trigamma(alphaSum) - 
+    sum(weights * trigamma(m + alphaSum))
+  # compute standard errors
+  obsinfo <- diag(obsinfoDvec) - obsinfoC
+  obsinfoInv <- diag(obsinfoDvecInv) + 
+    outer(obsinfoDvecInv, obsinfoDvecInv) / (1 / obsinfoC - sum(obsinfoDvecInv))
+  se <- sqrt(diag(obsinfoInv))
+  
+  # restore to original data size
+  if (any(csum == 0)) {
+    colidx <- (csum != 0)
+    # parameter estimate
+    tmp <- alphaHat
+    alphaHat <- rep(0, ncol(X))
+    alphaHat[colidx] <- tmp
+    # gradient/score vector
+    tmp <- score
+    score <- rep(0, ncol(X))
+    score[colidx] <- tmp
+    score[!colidx] <- weightsum * digamma(alphaSum) - 
+      sum(weights * digamma(alphaSum + m))
+    # obs info matrix
+    tmp <- obsinfo
+    obsinfo <- matrix(0, ncol(X), ncol(X))
+    obsinfo[colidx, colidx] <- tmp
+    obsinfo[!colidx, ] <- - obsinfoC
+    obsinfo[, !colidx] <- - obsinfoC
+    # inverse of obs info matrix
+    tmp <- obsinfoInv
+    obsinfoInv <- matrix(0, ncol(X), ncol(X))
+    obsinfoInv[colidx, colidx] <- tmp
+  }
+  
+  # output
+  list(estimate = alphaHat, se = se, maximum = loglIter, iterations = iter, 
+       gradient = score, obsinfo = obsinfo, obsinfoInv = obsinfoInv)
 }
-
-# output
-list(estimate = alphaHat, se = se, maximum = loglIter, iterations = iter, 
-     gradient = score, obsinfo = obsinfo, obsinfoInv = obsinfoInv)
-}
-
 
 ############################################################################
 
@@ -282,6 +347,11 @@ generate <- function(S, I, d) {
  #find the MLE
  
  MLE <- matrix.counts/N
+ 
+ #Estimate the Dich-Mult parameter
+ 
+ dirmult.alpha <- dirmultfit(matrix.counts, tolfun = 1e-6,
+                             maxiters = 1000, display = FALSE)
   
   #dat.counts <- rbind(dat.counts, matrix.counts)
   
