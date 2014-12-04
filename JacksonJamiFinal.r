@@ -294,9 +294,14 @@ return(out)
 
 I <- list(10, 20, 50, 100)
 
+names(I) <- c("10", "20", "50", "100")
+
+
 #Number of categories
 
-d <- list(2,5,10,20)
+d <- list(2, 5, 10, 20)
+
+names(d) <- c("2", "5", "10", "20")
 
 #Different combinations for factors
 
@@ -306,8 +311,8 @@ param <- list()
 
 count <- list()
 
-for (i in 1 : I){
-  for (j in 1 : d){
+for (i in names(I)){
+  for (j in names(d)){
     set.seed((i - 1) * I + (j - 1) * d)
     
     param <- generate(S, I, d)$parameters
