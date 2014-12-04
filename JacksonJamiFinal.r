@@ -579,5 +579,28 @@ for (i in names(I)){
                
 #}
 
-
+#############################################################################
              
+#Do Question 3
+
+
+#create the two factors 
+
+#Sample Size
+
+n <- list(50, 100, 200, 400)
+
+names(I) <- c("50", "100", "200", "400")
+
+
+#Correlation
+
+rho <- list(0, 0.25, 0.5, 0.9)
+
+names(d) <- c("0", "0.25", "0.5", "0.9")
+
+
+autocorr.mat <- function(p = 100, rho = 0.9) {
+  mat <- diag(p)
+  return(rho^abs(row(mat)-col(mat)))
+}
