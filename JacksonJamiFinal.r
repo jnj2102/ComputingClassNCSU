@@ -321,8 +321,6 @@ dirmultfit <- function(X, weights = NULL, alpha0 = NULL, algorithm = 'Newton',
 #it will output one matrix of counts I x d and one matrix of parameters I x d
 
 
-
-
 generate <- function(S, I, d) {
   
   dat.MLE <- NULL
@@ -443,15 +441,15 @@ count <- list()
 #     }
 # 
 
-biglist.param <- list()
+#biglist.param <- list()
 
-biglist.count <- list()
+#biglist.count <- list()
 
-MLE <- list()
+#MLE <- list()
 
 #MLE.var <- list()
 
-MLE.se <- list()
+#MLE.se <- list()
 
 
 
