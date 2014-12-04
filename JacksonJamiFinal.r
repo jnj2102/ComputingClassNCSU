@@ -353,7 +353,9 @@ library(matrixStats)
 # S <- 2000 
 # S <- 3000
 
-#Based on all standard errors being <= 0.005, I choose S = 
+#Based on all standard errors being <= 0.005, I choose S = 3000
+
+S <- 3000
 
 for (i in names(I)){
   for (j in names(d)){
