@@ -324,9 +324,9 @@ for (i in names(I)){
   for (j in names(d)){
     set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
     
-    param <- generate(S, I[[i]], d[[j]])$parameters
+    param[i, j] <- generate(S, I[[i]], d[[j]])$parameters
     
-    count <- generate(S, I[[i]], d[[j]])$counts
+    count[i, j] <- generate(S, I[[i]], d[[j]])$counts
     
   # output <- list(list(param), list(count)) 
     
