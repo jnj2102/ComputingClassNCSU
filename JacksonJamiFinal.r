@@ -375,12 +375,12 @@ for (i in names(I)){
 #a dataframe, and then does the calculations. I'm adding this to my
 #generate function
 
-MLE <- function(S, biglist.count["item:38"], I[[i]]) {
+MLE <- function(S, biglist.count["item:38"], I[[i]], N) {
                
   df.MLE.count <- data.frame(matrix(unlist(biglist.count["item:38"]), 
                           nrow = S*I[[i]], byrow = F))         
                
-               
+  MLE.i <- rowSums(df.MLE.count)/N             
                
                
 }               
