@@ -333,7 +333,9 @@ count <- list()
 #     }
 # 
 
-biglist <- list()
+biglist.param <- list()
+
+biglist.count <- list()
 
 for (i in names(I)){
   for (j in names(d)){
@@ -341,19 +343,14 @@ for (i in names(I)){
     
     param <- list(generate(S, I[[i]], d[[j]])$parameters)
     
-    name <- paste('item:',(I[[i]] - 1) * 3 + (d[[j]] - 1) * 11,sep='')
+    count <- list(generate(S, I[[i]], d[[j]])$counts)
     
-    biglist[[name]] <- param
+    name <- paste('item:', (I[[i]] - 1) * 3 + (d[[j]] - 1) * 11, sep='')
     
-   # count[I[[i]], d[[j]]] <- generate(S, I[[i]], d[[j]])$counts
+    biglist.param[[name]] <- param
     
-  # output <- list(list(param), list(count)) 
-    
-#output <- cbind(param)
-    
- #   df <- do.call("rbind", param)
-    
-#    df2 <- do.call("rbind", count)
+    biglist.count[[name]] <- count
+ 
     
   }
 }  
