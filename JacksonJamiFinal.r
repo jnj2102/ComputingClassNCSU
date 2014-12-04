@@ -311,8 +311,8 @@ param <- list()
 
 count <- list()
 
-for (i in 1 : I[i]){
-  for (j in d[j]){
+for (i in 1 : seq_along(I)){
+  for (j in seq_along(d)){
     set.seed((i - 1) * I + (j - 1) * d)
     
     param <- generate(S, I, d)$parameters
