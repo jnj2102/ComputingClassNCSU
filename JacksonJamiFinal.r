@@ -378,7 +378,7 @@ for (i in names(I)){
 MLE <- function(S, biglist.count["item:38"], I[[i]]) {
                
   df.MLE.count <- data.frame(matrix(unlist(biglist.count["item:38"]), 
-                          nrow = S*I[[i]], byrow = T))         
+                          nrow = S*I[[i]], byrow = F))         
                
                
                
