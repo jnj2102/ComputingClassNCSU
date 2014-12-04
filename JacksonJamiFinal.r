@@ -311,9 +311,17 @@ param <- list()
 
 count <- list()
 
+#Code to make sure no combo has the same seed number
+
+for (i in names(I)){
+       for (j in names(d)){
+             print(((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
+         }
+}
+
 for (i in names(I)){
   for (j in names(d)){
-    set.seed((I[[i]] - 1) * I + (d[[j]] - 1) * d)
+    set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
     
     param <- generate(S, I[[i]], d[[j]])$parameters
     
