@@ -311,13 +311,14 @@ param <- list()
 
 count <- list()
 
-#Code to make sure no combo has the same seed number
-
-for (i in names(I)){
-       for (j in names(d)){
-             print(((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
-         }
-}
+#Code to make sure no combo has the same seed number.  There are no 
+#duplicates
+# 
+# for (i in names(I)){
+#        for (j in names(d)){
+#              print(((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
+#          }
+# }
 
 for (i in names(I)){
   for (j in names(d)){
