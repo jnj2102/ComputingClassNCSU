@@ -341,7 +341,7 @@ for (i in names(I)){
     
     param <- list(generate(S, I[[i]], d[[j]])$parameters)
     
-    name <- paste('item:',I[[i]] + d[[j]],sep='')
+    name <- paste('item:',(I[[i]] - 1) * 3 + (d[[j]] - 1) * 11,sep='')
     
     biglist[[name]] <- param
     
