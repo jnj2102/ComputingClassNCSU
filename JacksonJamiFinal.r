@@ -466,14 +466,10 @@ biglist.se.EB <- list()
 
 # S <- 3
 # S <- 100
-# S <- 500
-# S <- 1000
-# S <- 2000 
-# S <- 3000
 
-#Based on all standard errors being <= 0.005, I choose S = 3000
+#Based on all standard errors being <= 0.005, I choose S = 100
 
-#S <- 3000
+S <- 100
 
 #library(matrixStats)
 
@@ -584,46 +580,4 @@ for (i in names(I)){
 #}
 
 
-               
-
-sim.matrices <- apply(treat.dataf, 1,
-  function(x) treat.grid(I = treat.dataf$X1, d = treat.dataf$X1))
-  
-
-  sigma.a <- treat$Var1[[1]]
-  P <- as.vector(treat$Var2[[1]]) #Extract sigma.a and npatterns
-  sigma.e<-1              # fixed values for errors dist. as standard normal
-  g<-rep(1:length(P), P)  # group index
-  N<-length(g)            # number of total observations
-  
-  #Set upvectors for results:
-  a<-rep(0,S)
-  b<-rep(0,S)
-  c<-rep(0,S)
-  
-  #Simulate data from a multivariate distribution:
-  Z<-model.matrix(~factor(g)-1) 
-  #Check dim
-  mu<-rep(0,N)
-  Sigma<-sigma.a*tcrossprod(Z,Z)+sigma.e*diag(N)
-  y<-mvrnorm(n=S,mu=mu,Sigma=Sigma)
-  
-  #Calculate statistics:
-  for(i in 1:S){
-    datos<-data.frame(cbind(y[i,],g))
-    names(datos)<-c("y","g")
-    m0<-lm(y ~ 1, data=datos)
-    m1<-lme(fixed=y~1,random=~1|g,data=datos,method='ML')
-    m2<-lme(fixed=y~1,random=~1|g,data=datos,method='REML')
-    # Compute Likelihood Ratio Test
-    lrt<-(2*( m1$logLik - logLik(m0)[1] ))
-    a[i]=1-pchisq(2*lrt,df=1)
-    # Compute Exact Likelihood Ratio Test distribution
-    b[i]<-exactLRT(m=m1,m0=m0, seed = 1800)$p
-    # Compute Exact Restricted Likelihood Ratio Test distribution
-    c[i]<-exactRLRT(m2,seed = 1800)$p
-  }
-  results<-as.matrix(cbind(a,b,c))
-  return(results=results)
-}
-
+             
