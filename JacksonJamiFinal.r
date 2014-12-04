@@ -312,9 +312,13 @@ for (i in 1 : I){
     
     param <- generate(S, I, d)$parameters
     
- #   count[i][j] <- generate(S, I, d)$counts
+    count <- generate(S, I, d)$counts
     
-    df <- do.call("rbind", param)
+   output <- list(list(param), list(count)) 
+    
+
+    
+   # df <- do.call("rbind", param)
     
 #    df2 <- do.call("rbind", count)
     
