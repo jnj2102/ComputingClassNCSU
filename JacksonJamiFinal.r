@@ -336,7 +336,7 @@ biglist.count <- list()
 
 for (i in names(I)){
   for (j in names(d)){
-    print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
+ #   print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
     set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
 
     
@@ -377,11 +377,12 @@ for (i in names(I)){
 
 MLE <- function(S, biglist.count["item:38"], I[[i]], N) {
                
-  df.MLE.count <- data.frame(matrix(unlist(biglist.count["item:38"]), 
-                          nrow = S*I[[i]], byrow = F))         
-               
+df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count["item:38"]), 
+                          nrow = S*I[[i]], byrow = F)))
 
-  split(as.matrix(df.MLE.count), col(as.matrix(df.MLE.count)))
+
+
+ a <-  split(df.MLE.count, col(df.MLE.count))
   
   MLE.i <- rowSums(df.MLE.count)/N       
   
