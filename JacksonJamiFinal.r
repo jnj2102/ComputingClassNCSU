@@ -336,6 +336,12 @@ biglist.count <- list()
 
 MLE.d <- list()
 
+#MLE.var <- list()
+
+MLE.se <- list()
+
+library(matrixStats)
+
 for (i in names(I)){
   for (j in names(d)){
  #   print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
@@ -356,9 +362,17 @@ for (i in names(I)){
                                   nrow = S * I[[i]], byrow = F)))
     
     MLE.d[name] <- list(colMeans(df.MLE.count)/N)
- 
+    
+    MLE.var <- colVars(df.MLE.count)
+    
+    MLE.se[name] <- list(sqrt(MLE.var/S))
+     
     #output
     MLE.d
+    
+    MLE.var
+    
+    
 
   }
 
@@ -386,12 +400,12 @@ for (i in names(I)){
 #a dataframe, and then does the calculations. I'm adding this to my
 #generate function
 
-MLE <- function(S, biglist.count["item:38"], I[[i]], N) {
-               
-df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count["item:38"]), 
-                          nrow = S * I[[i]], byrow = F)))
-
-MLE.d <- colMeans(df.MLE.count)/N
+# MLE <- function(S, biglist.count["item:38"], I[[i]], N) {
+#                
+# df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count["item:38"]), 
+#                           nrow = S * I[[i]], byrow = F)))
+# 
+# MLE.d <- colMeans(df.MLE.count)/N
 
 #  a <-  split(df.MLE.count, col(df.MLE.count))
 #  
