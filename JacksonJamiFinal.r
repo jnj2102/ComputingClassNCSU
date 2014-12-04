@@ -380,7 +380,11 @@ MLE <- function(S, biglist.count["item:38"], I[[i]], N) {
   df.MLE.count <- data.frame(matrix(unlist(biglist.count["item:38"]), 
                           nrow = S*I[[i]], byrow = F))         
                
-  MLE.i <- rowSums(df.MLE.count)/N             
+
+  split(as.matrix(df.MLE.count), col(as.matrix(df.MLE.count)))
+  
+  MLE.i <- rowSums(df.MLE.count)/N       
+  
                
                
 }               
