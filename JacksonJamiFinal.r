@@ -378,11 +378,17 @@ for (i in names(I)){
 MLE <- function(S, biglist.count["item:38"], I[[i]], N) {
                
 df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count["item:38"]), 
-                          nrow = S*I[[i]], byrow = F)))
+                          nrow = S * I[[i]], byrow = F)))
 
+output.matrix <-  matrix(0) 
 
+for (i in 1 : dim(df.MLE.count)[2]) {
 
  a <-  split(df.MLE.count, col(df.MLE.count))
+ 
+ output.matrix[, i] <- as.vector(a[[i]])
+
+}
   
   MLE.i <- rowSums(df.MLE.count)/N       
   
