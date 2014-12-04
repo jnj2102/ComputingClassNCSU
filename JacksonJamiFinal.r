@@ -358,7 +358,7 @@ for (i in names(I)){
     MLE.d[name] <- list(colMeans(df.MLE.count)/N)
  
     #output
-    out.f <- list(mles = MLE.d)
+    MLE.d
 
   }
 
