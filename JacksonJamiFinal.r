@@ -334,7 +334,7 @@ biglist.param <- list()
 
 biglist.count <- list()
 
-MLE.d <- list()
+MLE <- list()
 
 #MLE.var <- list()
 
@@ -361,16 +361,18 @@ for (i in names(I)){
     df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count[name]), 
                                   nrow = S * I[[i]], byrow = F)))
     
-    MLE.d[name] <- list(colMeans(df.MLE.count)/N)
+    MLE[name] <- list(colMeans(df.MLE.count)/N)
     
-    MLE.var <- colVars(df.MLE.count)
+    #find the sample variance of the MLEs
+    
+    MLE.var <- colVars(df.MLE.count/N)
     
     MLE.se[name] <- list(sqrt(MLE.var/S))
      
     #output
-    MLE.d
+    MLE
     
-    MLE.var
+    MLE.se
     
     
 
@@ -379,6 +381,14 @@ for (i in names(I)){
  
 }  
   
+#Figure out what number the S should be based on the standard errors of the MLE
+
+S <- 3
+S <- 100
+S <- 500
+S <- 1000
+
+
 
 #double check that I can reproduce my results
 #I can I run it exactly as my code is
@@ -432,7 +442,9 @@ for (i in names(I)){
   
                
                
-}               
+#}
+
+
                
 
 sim.matrices <- apply(treat.dataf, 1,
