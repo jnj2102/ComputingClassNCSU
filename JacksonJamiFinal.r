@@ -593,6 +593,7 @@ n <- list(50, 100, 200, 400)
 names(I) <- c("50", "100", "200", "400")
 
 library(MASS)
+library(glmnet)
 
 #Correlation
 
@@ -623,4 +624,5 @@ betas.ls <- lm(y ~ out, data = data)$coefficients
 
 #the ridge regression estimate of betas is found by
 
-ridge <- lm.ridge()
+ridge <- lm.ridge(y ~ out, data = data, 
+        lambda = cv.glmnet(out, y)$lambda.min, )
