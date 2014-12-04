@@ -445,6 +445,14 @@ count <- list()
 
 #biglist.count <- list()
 
+biglist.mean.MLE <- list()
+
+biglist.mean.EB <- list()
+
+biglist.se.MLE <- list()
+
+biglist.se.EB <- list()
+
 #MLE <- list()
 
 #MLE.var <- list()
@@ -475,7 +483,7 @@ for (i in names(I)){
     set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
 
     
-    param <- list(generate(S, I[[i]], d[[j]])$parameters)
+    meanEB <- list(generate(S, I[[i]], d[[j]])$mean.EB)
     
     count <- list(generate(S, I[[i]], d[[j]])$counts)
     
