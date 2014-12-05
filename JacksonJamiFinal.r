@@ -644,7 +644,7 @@ generate.shrink <- function(S, n, rho) {
   dat.ls.mse <- NULL
   
   
-  dat.ls.mse1 <- NULL
+#   dat.ls.mse1 <- NULL
   
   dat.ridge.mse <- NULL
   
@@ -652,8 +652,8 @@ generate.shrink <- function(S, n, rho) {
   
   dat.ls.pe <- NULL
   
-  dat.ls.pe1 <- NULL
-  
+#   dat.ls.pe1 <- NULL
+#   
   dat.ridge.pe <- NULL
 
   dat.lasso.pe <- NULL
@@ -710,12 +710,12 @@ generate.shrink <- function(S, n, rho) {
 # 
 # fitOLS1 <- lm(y.train ~  x.train)[-1] 
 
-fitOLS2  = glmnet(x.train, y.train, alpha = 0, lambda = 0,
+fitOLS  = glmnet(x.train, y.train, alpha = 0, lambda = 0,
                   intercept = FALSE)  #this is it!
 
 olsbeta = coef(fitOLS2)[-1]  #this is it!
 
-olspred = predict(fitOLS2, x.test)  #this is it!
+
 
 # glmnet automatically standardizes the predictors
 # Ridge Regression. No intercept
@@ -742,10 +742,12 @@ cvRidge = cv.glmnet(x.train, y.train, alpha = 0)
 
 ### Extract Coefficients ###
 # OLS coefficient estimates
+# 
+# betaHatOLS1 = fitOLS1$coefficients
 
-betaHatOLS1 = fitOLS1$coefficients
+# betaHatOLS = fitOLS$coefficients
 
-betaHatOLS = fitOLS$coefficients
+betaHatOLS = coef(fitOLS2)[-1] 
 
 # Lasso coefficient estimates 
 # s is lambda
@@ -762,7 +764,7 @@ betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))[-1]
 #calculate the MSE of OLS, Lasso, and Ridge using the true betas
 
 
-MSEOLS1 <- mean((betaHatOLS1 - beta.truth1) ^ 2)
+# MSEOLS1 <- mean((betaHatOLS1 - beta.truth1) ^ 2)
 
 MSEOLS <- mean((betaHatOLS - beta.truth) ^ 2)
 
@@ -771,8 +773,8 @@ MSELasso <- mean((betaHatLasso - beta.truth) ^ 2)
 MSERidge <- mean((betaHatRidge  - beta.truth) ^ 2)
 
 dat.ls.mse <- rbind(dat.ls.mse, MSEOLS)
-
-dat.ls.mse1 <- rbind(dat.ls.mse1, MSEOLS1)
+# 
+# dat.ls.mse1 <- rbind(dat.ls.mse1, MSEOLS1)
 
 dat.lasso.mse <- rbind(dat.lasso.mse, MSELasso)
 
@@ -797,11 +799,14 @@ y.test <- t(rmvnorm(n = 1, mean = x.test %*% beta.truth,
 
 #predict function gives inaccurate values for OLS
 # predOLS =  predict(fitOLS, newdata = as.data.frame(x.test))
+# 
+# predOLS  <- x.test %*% betaHatOLS
 
-predOLS  <- x.test %*% betaHatOLS
+# predOLS  <- x.test %*% betaHatOLS
 
+predOLS = predict(fitOLS, x.test)  #this is it!
 
-predOLS1  <- x.test1 %*% betaHatOLS1
+# predOLS1  <- x.test1 %*% betaHatOLS1
 predLasso <- predict(fitLasso, s = cvLasso$lambda.1se, newx = x.test)
 predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
     
@@ -809,15 +814,15 @@ predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
 
 # calculate test set prediction errors
 PEOLS = mean((predOLS - y.test) ^ 2)
-
-PEOLS1 = mean((predOLS1 - y.test) ^ 2)
+# 
+# PEOLS1 = mean((predOLS1 - y.test) ^ 2)
 PELasso = mean((predLasso - y.test) ^ 2)
 PERidge = mean((predRidge - y.test) ^ 2)
 
 
 dat.ls.pe <- rbind(dat.ls.pe, PEOLS)
 
-dat.ls.pe1 <- rbind(dat.ls.pe1, PEOLS1)
+# dat.ls.pe1 <- rbind(dat.ls.pe1, PEOLS1)
 
 dat.lasso.pe <- rbind(dat.lasso.pe, PELasso)
 
@@ -840,7 +845,7 @@ dat.ridge.pe <- rbind(dat.ridge.pe, PERidge)
   
   mean.MSE.OLS <- mean(dat.ls.mse)
 
-mean.MSE.OLS1 <- mean(dat.ls.mse1)
+# mean.MSE.OLS1 <- mean(dat.ls.mse1)
   
   mean.MSE.Ridge <- mean(dat.ridge.mse)
 
@@ -850,7 +855,7 @@ mean.MSE.OLS1 <- mean(dat.ls.mse1)
 
 mean.PE.OLS <- mean(dat.ls.pe)
 
-mean.PE.OLS1 <- mean(dat.ls.pe1)
+# mean.PE.OLS1 <- mean(dat.ls.pe1)
 
 mean.PE.Ridge <- mean(dat.ridge.pe)
 
@@ -859,8 +864,8 @@ mean.PE.Lasso <- mean(dat.lasso.pe)
   #find the standard error of the mean MSE for OLS, Ridge, Lasso
   
   se.mean.MSE.OLS <- sqrt(var(dat.ls.mse)/S)
-
-se.mean.MSE.OLS1 <- sqrt(var(dat.ls.mse1)/S)
+# 
+# se.mean.MSE.OLS1 <- sqrt(var(dat.ls.mse1)/S)
   
   se.mean.MSE.Ridge <- sqrt(var(dat.ridge.mse)/S)
 
@@ -869,8 +874,8 @@ se.mean.MSE.Lasso <- sqrt(var(dat.lasso.mse)/S)
 #find the standard error of the mean prediction error for OLS, Ridge, Lasso
 
 se.mean.PE.OLS <- sqrt(var(dat.ls.pe)/S)
-
-se.mean.PE.OLS1 <- sqrt(var(dat.ls.pe1)/S)
+# 
+# se.mean.PE.OLS1 <- sqrt(var(dat.ls.pe1)/S)
 
 se.mean.PE.Ridge <- sqrt(var(dat.ridge.pe)/S)
 
@@ -878,10 +883,10 @@ se.mean.PE.Lasso <- sqrt(var(dat.lasso.pe)/S)
 
   
   #output the means and standard errors because this is my function
-  list(MeanMSEOLS = mean.MSE.OLS, MeanMSEOLS1 = mean.MSE.OLS1,
+   list(MeanMSEOLS = mean.MSE.OLS, MeanMSEOLS1 = mean.MSE.OLS1,
        MeanMSERidge = mean.MSE.Ridge, 
        MeanMSELasso = mean.MSE.Lasso, meanPEOLS = mean.PE.OLS,
-       meanPEOLS1 = mean.PE.OLS1,
+        meanPEOLS1 = mean.PE.OLS1,
        meanPERidge = mean.PE.Ridge, meanPELasso = mean.PE.Lasso,
        seMSEOLS = se.mean.MSE.OLS, seMSEOLS1 = se.mean.MSE.OLS1,
        seMSERidge = se.mean.MSE.Ridge,
