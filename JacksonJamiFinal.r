@@ -684,6 +684,8 @@ generate.shrink <- function(S, n, rho) {
     
     #this y works too
 
+#it's faster to say y.train = X*B + noise * rnorm(x)
+
      y.train <- mvrnorm(n = 1, mu = x.train %*% beta.truth, 
          Sigma = diag(noise, nrow = n))
     
@@ -703,10 +705,17 @@ generate.shrink <- function(S, n, rho) {
 # estimate models
 
 # Ordinary Least Squares. No intercept
+# 
+#  fitOLS = lm(y.train ~ 0 + x.train) 
+# 
+# fitOLS1 <- lm(y.train ~  x.train)[-1] 
 
- fitOLS = lm(y.train ~ 0 + x.train) 
+fitOLS2  = glmnet(x.train, y.train, alpha = 0, lambda = 0,
+                  intercept = FALSE)  #this is it!
 
-fitOLS1 <- lm(y.train ~  x.train) 
+olsbeta = coef(fitOLS2)[-1]  #this is it!
+
+olspred = predict(fitOLS2, x.test)  #this is it!
 
 # glmnet automatically standardizes the predictors
 # Ridge Regression. No intercept
