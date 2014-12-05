@@ -655,10 +655,17 @@ generate <- function(S, n, rho) {
     #based on the x matrix but I need to specify
     #my true betas here and my noise here too
     
-    y.train <- dmvnorm(x.train, mean = as.vector(x.train %*% beta.truth), 
-                sigma = diag(noise, nrow = n),  log = FALSE)
+    #dmvnorm knows to multiply x.train and my beta.truth together
+    #dmvnorm is using algorithms to estimate the inverse of the covariance
+    #matrix so it has to be pxp matrix (not the usual NxN matrix)
+    
+    y.train <- dmvnorm(x.train, mean = beta.truth, 
+                sigma = diag(noise, nrow = p),  log = FALSE)
+    
+
     
     
+
     
     
     
