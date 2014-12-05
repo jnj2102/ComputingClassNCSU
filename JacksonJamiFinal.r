@@ -686,14 +686,16 @@ generate.shrink <- function(S, n, rho) {
 
 #it's faster to say y.train = X*B + noise * rnorm(x)
 
-     y.train <- mvrnorm(n = 1, mu = x.train %*% beta.truth, 
-         Sigma = diag(noise, nrow = n))
+#      y.train <- mvrnorm(n = 1, mu = x.train %*% beta.truth, 
+#          Sigma = diag(noise, nrow = n))
     
 #this is the y that I want
 #    y.train <- t(rmvnorm(n = 1, mean = x.train %*% beta.truth, 
 #         sigma = diag(noise, nrow = n)))
 # 
-# 
+
+y.train <- x.train %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
+
 # x.test1 <- cbind(rep(1, p), x.test)
 # beta.truth1 <- rep(1, p + 1)
 # 
@@ -787,13 +789,19 @@ dat.ridge.mse <- rbind(dat.ridge.mse, MSERidge)
 #generate a new x test set
 
 
-x.test <- rmvnorm(n = n, mean = rep(0, p), 
-                   sigma = autocorr.mat(p, rho))
+# x.test <- rmvnorm(n = n, mean = rep(0, p), 
+#                    sigma = autocorr.mat(p, rho))
 
+
+x.test <- mvrnorm(n = n, mu = rep(0, p), 
+                       sigma = autocorr.mat(p, rho), empirical = TRUE)
+                  
 #generate a new y from the x test set
 
-y.test <- t(rmvnorm(n = 1, mean = x.test %*% beta.truth, 
-                     sigma = diag(noise, nrow = n)))
+# y.test <- t(rmvnorm(n = 1, mean = x.test %*% beta.truth, 
+#                      sigma = diag(noise, nrow = n)))
+
+y.test <- x.test %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 
 # calculate predicted values
 
@@ -883,15 +891,15 @@ se.mean.PE.Lasso <- sqrt(var(dat.lasso.pe)/S)
 
   
   #output the means and standard errors because this is my function
-   list(MeanMSEOLS = mean.MSE.OLS, MeanMSEOLS1 = mean.MSE.OLS1,
+   list(MeanMSEOLS = mean.MSE.OLS, 
        MeanMSERidge = mean.MSE.Ridge, 
        MeanMSELasso = mean.MSE.Lasso, meanPEOLS = mean.PE.OLS,
-        meanPEOLS1 = mean.PE.OLS1,
+        
        meanPERidge = mean.PE.Ridge, meanPELasso = mean.PE.Lasso,
-       seMSEOLS = se.mean.MSE.OLS, seMSEOLS1 = se.mean.MSE.OLS1,
+       seMSEOLS = se.mean.MSE.OLS, 
        seMSERidge = se.mean.MSE.Ridge,
        seMSELasso = se.mean.MSE.Lasso, sePEOLS = se.mean.PE.OLS,
-       sePEOLS1 = se.mean.PE.OLS1,
+    
        sePERidge = se.mean.PE.Ridge, sePELasso = se.mean.PE.Lasso)
   
   
@@ -902,8 +910,8 @@ se.mean.PE.Lasso <- sqrt(var(dat.lasso.pe)/S)
 
 
 biglist.mean.MSEOLS <- list()
-
-biglist.mean.MSEOLS1 <- list()
+# 
+# biglist.mean.MSEOLS1 <- list()
 
 biglist.mean.MSERidge <- list()
 
@@ -911,16 +919,16 @@ biglist.mean.MSELasso <- list()
 
 biglist.mean.PEOLS <- list()
 
-
-biglist.mean.PEOLS1 <- list()
+# 
+# biglist.mean.PEOLS1 <- list()
 
 biglist.mean.PERidge <- list()
 
 biglist.mean.PELasso <- list()
 
 biglist.se.MSEOLS <- list()
-
-biglist.se.MSEOLS1 <- list()
+# 
+# biglist.se.MSEOLS1 <- list()
 
 biglist.se.MSERidge <- list()
 
@@ -928,8 +936,8 @@ biglist.se.MSELasso <- list()
 
 biglist.se.PEOLS <- list()
 
-
-biglist.se.PEOLS1 <- list()
+# 
+# biglist.se.PEOLS1 <- list()
 
 biglist.se.PERidge <- list()
 
