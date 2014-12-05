@@ -601,27 +601,45 @@ rho <- list(0, 0.25, 0.5, 0.9)
 
 names(d) <- c("0", "0.25", "0.5", "0.9")
 
+#p the number of predictors is fixed 
+
+p <- 50
+
+#My truth beta estimates are fixed since I fix p
+
+beta.truth <- rep(1, 50)
+
+
+#Create a function to find the variance-covariance matrix
+#that is based on rho
+
+autocorr.mat <- function(p = p, rho = rho) {
+  mat <- diag(rho)
+  return(rho ^ abs(row(mat) - col(mat)))
+  
+}
 
 #create a function that finds the OLS, ridge, and lasso estimates and
 #calculates the MSE and prediction errors
 
 
-generate <- function(S, I, d) {
+generate <- function(S, n, rho) {
   
-  dat.MLE <- NULL
+  dat.ls <- NULL
   
-  dat.EB <- NULL
+  dat.ridge <- NULL
+  
+  dat.lasso <- NULL
   
   for (k in 1 : S) {
     
-    multi.param <- matrix(runif(I * d, min = 0, max = 1), nrow = I, 
-                          ncol = d)
-    
-    #I need to normalize the matrix of parameters.  This is my "TRUTH"
-    
-    final.multi.param <- multi.param/rowSums(multi.param)
     
     
+    
+    #here is how I can generate the X matrix
+    out <- mvrnorm(n = 50, mu = c(0,0), Sigma = matrix(c(1,0.56,0.56,1), ncol = 2),
+                   empirical = TRUE)
+
     matrix.counts <- t(apply(final.multi.param, 1, 
                              function(x) rmultinom(n = 1, size = N,
                                                    prob = x)))
@@ -699,15 +717,6 @@ generate <- function(S, I, d) {
 
 
 
-#create the sigma matrix which is a function of rho
-autocorr.mat <- function(p = 100, rho = 0.9) {
-  mat <- diag(p)
-  return(rho^abs(row(mat)-col(mat)))
-}
-
-#here is how I can generate the X matrix
-out <- mvrnorm(n = 50, mu = c(0,0), Sigma = matrix(c(1,0.56,0.56,1), ncol = 2),
-                               empirical = TRUE)
 
 #then find the density of y based on the x matrix but I need to specify
 #my true betas here and my noise here too
