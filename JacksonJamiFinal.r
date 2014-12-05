@@ -726,9 +726,9 @@ betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))[-1]
     
 #calculate the MSE of OLS, Lasso, and Ridge using the true betas
 
-MSEOLS = mean((betaHatOLS - beta.truth)^2)
-MSELasso = mean((betaHatLasso - beta.truth)^2)
-MSERidge = mean((betaHatRidge  - beta.truth)^2)
+MSEOLS <- mean((betaHatOLS - beta.truth) ^ 2)
+MSELasso <- mean((betaHatLasso - beta.truth) ^ 2)
+MSERidge <- mean((betaHatRidge  - beta.truth) ^ 2)
 
 dat.ls.mse <- rbind(dat.ls.mse, MSEOLS)
 
@@ -753,52 +753,80 @@ y.test <- t(rmvnorm(n = 1, mean = x.test %*% beta.truth,
 
 # calculate predicted values
 
-predOLS =  predict(fitOLS, newdata = as.data.frame(x.test))
+#predict function gives inaccurate values for OLS
+# predOLS =  predict(fitOLS, newdata = as.data.frame(x.test))
 
-predLasso = predict(fitLasso, s = cvLasso$lambda.1se, newx = x.test)
-predRidge = predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
-    
-    
+predOLS  <- x.test %*% betaHatOLS
+predLasso <- predict(fitLasso, s = cvLasso$lambda.1se, newx = x.test)
+predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
     
     
 
+# calculate test set prediction errors
+PEOLS = mean((predOLS - y.test) ^ 2)
+PELasso = mean((predLasso - y.test) ^ 2)
+PERidge = mean((predRidge - y.test) ^ 2)
+
+
+dat.ls.pe <- rbind(dat.ls.pe, PEOLS)
+
+dat.lasso.pe <- rbind(dat.lasso.pe, PELasso)
+
+dat.ridge.pe <- rbind(dat.ridge.pe, PERidge)
     
-    #Get the Estimation error for MLE
-    
-    ERR.MLE <- sum(rowSums(abs(pi.MLE - final.multi.param))) * 1/(2 * I)
-    
-    #Get the estimation error for EB
-    
-    ERR.EB <- sum(rowSums(abs(pi.EB - final.multi.param))) * 1/(2 * I)
-    
-    #Now I can combine each of these estimation errors for each replicate
-    #because I want to summarize the estimation errors, not anything else.
-    #I'm left with one big column vector after S replicates for ERR MLE and 
-    #ERR EB
-    
-    dat.EB <- rbind(dat.EB, ERR.EB)
-    dat.MLE <- rbind(dat.MLE, ERR.MLE)
-    
-    
+
+#standardize y.test to do prediction errors
+#This makes the prediction errors much worse than not 
+#standardizing y
+
+# y.test.stand <- scale(y.test, center = TRUE, scale = TRUE)
+# 
+# PELasso.stan = mean((predLasso - y.test.stand) ^ 2)
+# PERidge.stan = mean((predRidge - y.test.stand) ^ 2)
+
     
   }
   
-  #find the mean estimation error for EB and MLE
+  #find the mean MSE for OLS, Ridge, Lasso
   
-  mean.err.EB <- mean(dat.EB)
+  mean.MSE.OLS <- mean(dat.ls.mse)
   
-  mean.err.MLE <- mean(dat.MLE)
+  mean.MSE.Ridge <- mean(dat.ridge.mse)
+
+ mean.MSE.Lasso <- mean(dat.lasso.mse)
+
+#find the mean prediction error for OLS, Ridge, Lasso
+
+mean.PE.OLS <- mean(dat.ls.pe)
+
+mean.PE.Ridge <- mean(dat.ridge.pe)
+
+mean.PE.Lasso <- mean(dat.lasso.pe)
   
-  #find the standard error of the mean estimation error for EB and MLE
+  #find the standard error of the mean MSE for OLS, Ridge, Lasso
   
-  se.mean.err.EB <- sqrt(var(dat.EB)/S)
+  se.mean.MSE.OLS <- sqrt(var(dat.ls.mse)/S)
   
-  se.mean.err.MLE <- sqrt(var(dat.MLE)/S)
-  
+  se.mean.MSE.Ridge <- sqrt(var(dat.ridge.mse)/S)
+
+se.mean.MSE.Lasso <- sqrt(var(dat.lasso.mse)/S)
+
+#find the standard error of the mean prediction error for OLS, Ridge, Lasso
+
+se.mean.PE.OLS <- sqrt(var(dat.ls.pe)/S)
+
+se.mean.PE.Ridge <- sqrt(var(dat.ridge.pe)/S)
+
+se.mean.PE.Lasso <- sqrt(var(dat.lasso.pe)/S)
+
   
   #output the means and standard errors because this is my function
-  list(mean.EB = mean.err.EB, mean.MLE = mean.err.MLE, 
-       se.EB = se.mean.err.EB, se.MLE = se.mean.err.MLE)
+  list(MeanMSEOLS = mean.MSE.OLS, MeanMSERidge = mean.MSE.Ridge, 
+       MeanMSELasso = mean.MSE.Lasso, meanPEOLS = mean.PE.OLS,
+       meanPERidge = mean.PE.Ridge, meanPELasso = mean.PE.Lasso,
+       seMSEOLS = se.mean.MSE.OLS, seMSERidge = se.mean.MSE.Ridge,
+       seMSELasso = se.mean.MSE.Lasso, sePEOLS = se.mean.PE.OLS,
+       sePERidge = se.mean.PE.Ridge, sePELasso = se.mean.PE.Lasso)
   
   
 }
