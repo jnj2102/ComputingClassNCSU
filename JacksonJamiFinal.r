@@ -613,8 +613,8 @@ beta.truth <- rep(1, 50)
 #Create a function to find the variance-covariance matrix
 #that is based on rho
 
-autocorr.mat <- function(p = p, rho = rho) {
-  mat <- diag(rho)
+autocorr.mat <- function(p, rho) {
+  mat <- diag(p)
   return(rho ^ abs(row(mat) - col(mat)))
   
 }
@@ -633,12 +633,9 @@ generate <- function(S, n, rho) {
   
   for (k in 1 : S) {
     
-    
-    
-    
     #here is how I can generate the X matrix
-    out <- mvrnorm(n = 50, mu = c(0,0), Sigma = matrix(c(1,0.56,0.56,1), ncol = 2),
-                   empirical = TRUE)
+    x.train <- mvrnorm(n = n, mu = rep(0, p), 
+              Sigma = autocorr.mat(p, rho), empirical = TRUE)
 
     matrix.counts <- t(apply(final.multi.param, 1, 
                              function(x) rmultinom(n = 1, size = N,
