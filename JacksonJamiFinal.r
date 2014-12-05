@@ -636,7 +636,7 @@ library(mvtnorm)
 # S <- 3
 # S <- 100
 
-#Based on all standard errors being <= 0.005, I choose S = 100
+#Based on all standard errors being <= 0.005, I choose S = 
 
 
 generate.shrink <- function(S, n, rho) {
