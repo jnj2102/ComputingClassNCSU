@@ -697,7 +697,7 @@ generate.shrink <- function(S, n, rho) {
 
 # Ordinary Least Squares. No intercept
 
-# fitOLS = lm(y.train ~ 0 + x.train) 
+ fitOLS = lm(y.train ~ 0 + x.train) 
 
 fitOLS1 <- lm(y.train ~  x.train) 
 
@@ -784,7 +784,9 @@ y.test <- t(rmvnorm(n = 1, mean = x.test %*% beta.truth,
 
 predOLS  <- x.test %*% betaHatOLS
 
-predOLS1  <- x.test %*% betaHatOLS1
+x.test1 <- cbind(rep(1, p), x.test)
+
+predOLS1  <- x.test1 %*% betaHatOLS1
 predLasso <- predict(fitLasso, s = cvLasso$lambda.1se, newx = x.test)
 predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
     
