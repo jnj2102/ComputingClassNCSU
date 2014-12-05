@@ -631,11 +631,17 @@ library(mvtnorm)
 
 generate <- function(S, n, rho) {
   
-  dat.ls <- NULL
+  dat.ls.mse <- NULL
   
-  dat.ridge <- NULL
+  dat.ridge.mse <- NULL
   
-  dat.lasso <- NULL
+  dat.lasso.mse <- NULL
+  
+  dat.ls.pe <- NULL
+  
+  dat.ridge.pe <- NULL
+
+  dat.lasso.pe <- NULL
   
   for (k in 1 : S) {
     
@@ -674,13 +680,18 @@ generate <- function(S, n, rho) {
 #### Model Estimation ####
 # estimate models
 
-fitOLS = lm(y.train ~ x.train)  # Ordinary Least Squares
+# Ordinary Least Squares. No intercept
+
+fitOLS = lm(y.train ~ 0 + x.train) 
 
 # glmnet automatically standardizes the predictors
+# Ridge Regression. No intercept
 
-fitRidge = glmnet(x.train, y.train, alpha = 0)  # Ridge Regression
+fitRidge = glmnet(x.train, y.train, alpha = 0, intercept = FALSE)
 
-fitLasso = glmnet(x.train, y.train, alpha = 1)  # The Lasso
+# The Lasso. No intercept
+
+fitLasso = glmnet(x.train, y.train, alpha = 1, intercept = FALSE) 
 
     
     
@@ -709,27 +720,20 @@ betaHatLasso = as.double(coef(fitLasso, s = cvLasso$lambda.1se))
 betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))
 
     
+#calculate the MSE of OLS, Lasso, and Ridge using the true betas
+
+MSEOLS = mean((betaHatOLS - beta.truth)^2)
+MSELasso = mean((betaHatLasso - beta.truth)^2)
+MSERidge = mean((betaHatRidge  - beta.truth)^2)
+
+
+# predOLS =  predict(fitOLS, 
+#                   newdata = as.data.frame(cbind(XTest, yTrain = yTest)))
     
     
     
     
-    
-    #find the MLE
-    
-    pi.MLE <- matrix.counts/N
-    
-    #Estimate the Dich-Mult parameter
-    
-    dirmult.alpha <- dirmultfit(matrix.counts, algorithm = 'Newton',
-                                tolfun = 1e-6, maxiters = 1000, display = FALSE)$estimate
-    
-    batchsize.alpha <- sum(dirmult.alpha)
-    
-    alpha.matrix <- t(replicate(dim(matrix.counts)[1], dirmult.alpha))
-    
-    #Get the empirical Bayes estimate
-    
-    pi.EB <- (matrix.counts + alpha.matrix) * 1/(N + batchsize.alpha)
+
     
     #Get the Estimation error for MLE
     
