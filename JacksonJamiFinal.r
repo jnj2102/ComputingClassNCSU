@@ -320,6 +320,7 @@ dirmultfit <- function(X, weights = NULL, alpha0 = NULL, algorithm = 'Newton',
 #this function will take in a fixed I and a fixed d and fixed S
 #it will output one matrix of counts I x d and one matrix of parameters I x d
 
+N <- 20
 
 generate <- function(S, I, d) {
   
@@ -634,7 +635,7 @@ library(mvtnorm)
 #MLE by running the below code with different values of S
 
 # S <- 3
- S <- 100
+ S <- 500
 
 #Based on all standard errors being <= 0.005, I choose S = 
 
@@ -786,15 +787,16 @@ dat.ridge.mse <- rbind(dat.ridge.mse, MSERidge)
 #test set for x and a new test set for y
 
 
-#generate a new x test set
+#generate a new x test set using rmvnorm to ensure I get different
+#x values
 
 
-# x.test <- rmvnorm(n = n, mean = rep(0, p), 
-#                    sigma = autocorr.mat(p, rho))
+ x.test <- rmvnorm(n = n, mean = rep(0, p), 
+                    sigma = autocorr.mat(p, rho))
 
-
-x.test <- mvrnorm(n = n, mu = rep(0, p), 
-                       Sigma = autocorr.mat(p, rho), empirical = TRUE)
+# 
+# x.test <- mvrnorm(n = n, mu = rep(0, p), 
+#                        Sigma = autocorr.mat(p, rho), empirical = TRUE)
                   
 #generate a new y from the x test set
 
@@ -1066,7 +1068,7 @@ for (i in names(n)){
   
 }  
 
-totalfile <- save.image(file="Allproject.rdata")
+totalfile <- save.image(file = "Allproject.rdata")
 
 #I'm going to need to see how many S's I need for this question
 
