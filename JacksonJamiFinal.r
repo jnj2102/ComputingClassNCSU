@@ -624,5 +624,9 @@ betas.ls <- lm(y ~ out, data = data)$coefficients
 
 #the ridge regression estimate of betas is found by
 
-ridge <- lm.ridge(y ~ out, data = data, 
-        lambda = cv.glmnet(out, y)$lambda.min, )
+ridge <- lm.ridge(y ~ out, 
+            lambda = cv.glmnet(out, y)$lambda.1se )
+
+ridge2 <- glmnet(out, y, family = "gaussian", 
+                  lambda = cv.glmnet(out, y)$lambda.1se, alpha = 0)
+
