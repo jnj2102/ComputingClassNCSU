@@ -629,7 +629,7 @@ autocorr.mat <- function(n, rho) {
 library(mvtnorm)
 
 
-generate <- function(S, n, rho) {
+generate.shrink <- function(S, n, rho) {
   
   dat.ls.mse <- NULL
   
@@ -860,14 +860,37 @@ biglist.se.PERidge <- list()
 biglist.se.PELasso <- list()
 
 
+#Code to make sure no combo has the same seed number.  There are no 
+#duplicates
+# 
+ for (i in names(n)){
+        for (j in names(rho)){
+              print(((n[[i]] - 1) * 3 + (rho[[j]] - 1) * 11))
+          }
+ }
+# 
+  for (i in names(n)){
+#     
+               print(n[[i]])
+# 
+  }
+# 
+# 
+   for (j in names(rho)){
+# 
+      print(rho[[j]])
+     }
+# 
 
-for (i in names(I)){
-  for (j in names(d)){
+
+
+for (i in names(n)){
+  for (j in names(rho)){
     #   print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
-    set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
+    set.seed((n[[i]] - 1) * 3 + (rho[[j]] - 1) * 11)
     
     
-    meanEB <- list(generate(S, I[[i]], d[[j]])$mean.EB)
+    MeanMSEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanMSEOLS)
     
     meanMLE <- list(generate(S, I[[i]], d[[j]])$mean.MLE)
     
