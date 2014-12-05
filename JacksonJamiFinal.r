@@ -794,7 +794,7 @@ dat.ridge.mse <- rbind(dat.ridge.mse, MSERidge)
 
 
 x.test <- mvrnorm(n = n, mu = rep(0, p), 
-                       sigma = autocorr.mat(p, rho), empirical = TRUE)
+                       Sigma = autocorr.mat(p, rho), empirical = TRUE)
                   
 #generate a new y from the x test set
 
@@ -822,8 +822,10 @@ predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
 
 # calculate test set prediction errors
 PEOLS = mean((predOLS - y.test) ^ 2)
+
 # 
 # PEOLS1 = mean((predOLS1 - y.test) ^ 2)
+
 PELasso = mean((predLasso - y.test) ^ 2)
 PERidge = mean((predRidge - y.test) ^ 2)
 
