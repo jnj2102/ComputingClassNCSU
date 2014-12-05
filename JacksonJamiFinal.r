@@ -629,6 +629,16 @@ autocorr.mat <- function(n, rho) {
 library(mvtnorm)
 
 
+
+#Figure out what number the S should be based on the standard errors of the
+#MLE by running the below code with different values of S
+
+# S <- 3
+# S <- 100
+
+#Based on all standard errors being <= 0.005, I choose S = 100
+
+
 generate.shrink <- function(S, n, rho) {
   
   dat.ls.mse <- NULL
