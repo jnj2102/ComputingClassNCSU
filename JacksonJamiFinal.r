@@ -914,38 +914,62 @@ for (i in names(n)){
     
     sePELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$sePELasso)
     
+        
+    name <- paste('item:', (n[[i]] - 1) * 3 + (rho[[j]] - 1) * 11, sep = '')
     
     
-    name <- paste('item:', (I[[i]] - 1) * 3 + (d[[j]] - 1) * 11, sep = '')
+    biglist.mean.MSEOLS[[name]] <- MeanMSEOLS 
     
-    biglist.mean.EB[[name]] <- meanEB
+    biglist.mean.MSERidge[[name]] <- MeanMSERidge
     
-    biglist.mean.MLE[[name]] <- meanMLE
+    biglist.mean.MSELasso[[name]] <- MeanMSELasso
     
-    seMLE <- list(generate(S, I[[i]], d[[j]])$se.MLE)
+    biglist.mean.PEOLS[[name]] <- MeanPEOLS
     
-    biglist.se.MLE[[name]] <- seMLE
+    biglist.mean.PERidge[[name]] <- MeanPERidge
     
-    seEB <- list(generate(S, I[[i]], d[[j]])$se.EB)
+    biglist.mean.PELasso[[name]] <-  MeanPELasso
     
-    biglist.se.EB[[name]] <- seEB
+    biglist.se.MSEOLS[[name]] <- seMSEOLS 
     
-    #  df.MLE.count <- as.matrix(data.frame(matrix(unlist(biglist.count[name]), 
-    #            nrow = S * I[[i]], byrow = F)))
+    biglist.se.MSERidge[[name]] <- seMSERidge
     
-    # MLE[name] <- list(colMeans(df.MLE.count)/N)
+    biglist.se.MSELasso[[name]] <- seMSELasso
     
-    #find the sample variance of the MLEs
+    biglist.se.PEOLS[[name]] <-  sePEOLS
     
-    #MLE.var <- colVars(df.MLE.count/N)
+    biglist.se.PERidge[[name]] <- sePERidge
     
-    #MLE.se[name] <- list(sqrt(MLE.var/S))
+    biglist.se.PELasso[[name]] <- sePELasso 
+    
+    
+    
     
     #output
-    biglist.mean.EB
-    biglist.mean.MLE
-    biglist.se.EB
-    biglist.se.MLE
+    biglist.mean.MSEOLS 
+    
+    biglist.mean.MSERidge 
+    
+    biglist.mean.MSELasso 
+    
+    biglist.mean.PEOLS
+    
+    biglist.mean.PERidge 
+    
+    biglist.mean.PELasso
+    
+    biglist.se.MSEOLS
+    
+    biglist.se.MSERidge
+    
+    biglist.se.MSELasso 
+    
+    biglist.se.PEOLS 
+    
+    biglist.se.PERidge 
+    
+    biglist.se.PELasso 
+    
     
     
     
@@ -956,6 +980,7 @@ for (i in names(n)){
 }  
 
 
+#Try using kable function to make a nice table from all of these lists
 
 
 
