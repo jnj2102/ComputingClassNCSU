@@ -609,6 +609,10 @@ p <- 50
 
 beta.truth <- rep(1, 50)
 
+#I am keeping my noise factor fixed and constant 
+
+noise <- 1
+
 
 #Create a function to find the variance-covariance matrix
 #that is based on rho
@@ -637,9 +641,23 @@ generate <- function(S, n, rho) {
     x.train <- mvrnorm(n = n, mu = rep(0, p), 
               Sigma = autocorr.mat(p, rho), empirical = TRUE)
 
-    matrix.counts <- t(apply(final.multi.param, 1, 
-                             function(x) rmultinom(n = 1, size = N,
-                                                   prob = x)))
+    
+    #then find the density of y (a vector)
+    #based on the x matrix but I need to specify
+    #my true betas here and my noise here too
+    
+    y <- dmvnorm(x.train, mean = x.train %*% beta.truth, 
+                 sigma = noise, log=FALSE)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     #find the MLE
     
@@ -715,10 +733,6 @@ generate <- function(S, n, rho) {
 
 
 
-#then find the density of y based on the x matrix but I need to specify
-#my true betas here and my noise here too
-
- y <- dmvnorm(x, mean, sigma, log=FALSE)
 
 
 #then the Least squares estimate of betas is found by
