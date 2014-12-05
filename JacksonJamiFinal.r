@@ -684,7 +684,30 @@ fitLasso = glmnet(x.train, y.train, alpha = 1)  # The Lasso
 
     
     
-    
+
+#### Model Selection ####
+
+# (10-fold) cross validation for the Lasso
+
+cvLasso = cv.glmnet(x.train, y.train, alpha = 1)
+
+
+# (10-fold) cross validation for Ridge Regression
+cvRidge = cv.glmnet(x.train, y.train, alpha = 0)
+
+
+### Extract Coefficients ###
+# OLS coefficient estimates
+
+betaHatOLS = fitOLS$coefficients
+
+# Lasso coefficient estimates 
+# s is lambda
+betaHatLasso = as.double(coef(fitLasso, s = cvLasso$lambda.1se))  
+
+# Ridge  coefficient estimates 
+betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))
+
     
     
     
