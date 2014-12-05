@@ -769,11 +769,11 @@ betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))[-1]
 
 # MSEOLS1 <- mean((betaHatOLS1 - beta.truth1) ^ 2)
 
-MSEOLS <- sqrt(mean((betaHatOLS - beta.truth) ^ 2))
+MSEOLS <- sqrt(mean(abs(betaHatOLS - beta.truth)))
 
 
-MSELasso <- sqrt(mean((betaHatLasso - beta.truth) ^ 2))
-MSERidge <- sqrt(mean((betaHatRidge  - beta.truth) ^ 2))
+MSELasso <- sqrt(mean(abs(betaHatLasso - beta.truth)))
+MSERidge <- sqrt(mean(abs(betaHatRidge  - beta.truth)))
 
 dat.ls.mse <- rbind(dat.ls.mse, MSEOLS)
 # 
@@ -790,13 +790,13 @@ dat.ridge.mse <- rbind(dat.ridge.mse, MSERidge)
 #generate a new x test set using rmvnorm to ensure I get different
 #x values
 
-
- x.test <- rmvnorm(n = n, mean = rep(0, p), 
-                    sigma = autocorr.mat(p, rho))
+# 
+#  x.test <- rmvnorm(n = n, mean = rep(0, p), 
+#                     sigma = autocorr.mat(p, rho))
 
 # 
-# x.test <- mvrnorm(n = n, mu = rep(0, p), 
-#                        Sigma = autocorr.mat(p, rho), empirical = TRUE)
+ x.test <- mvrnorm(n = n, mu = rep(0, p), 
+                        Sigma = autocorr.mat(p, rho), empirical = TRUE)
                   
 #generate a new y from the x test set
 
@@ -823,13 +823,13 @@ predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
     
 
 # calculate test set prediction errors
-PEOLS = sqrt(mean((predOLS - y.test) ^ 2))
+PEOLS = sqrt(mean(abs(predOLS - y.test)))
 
 # 
 # PEOLS1 = mean((predOLS1 - y.test) ^ 2)
 
-PELasso = sqrt(mean((predLasso - y.test) ^ 2))
-PERidge = sqrt(mean((predRidge - y.test) ^ 2))
+PELasso = sqrt(mean(abs(predLasso - y.test)))
+PERidge = sqrt(mean(abs(predRidge - y.test)))
 
 
 dat.ls.pe <- rbind(dat.ls.pe, PEOLS)
