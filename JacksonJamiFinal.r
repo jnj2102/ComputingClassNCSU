@@ -663,12 +663,12 @@ generate.shrink <- function(S, n, rho) {
     #here is how I can generate the X matrix using random numbers
     
     #this version should also be random
-#         x.train <- mvrnorm(n = n, mu = rep(0, p), 
-#                       Sigma = autocorr.mat(p, rho), empirical = TRUE)
+         x.train <- mvrnorm(n = n, mu = rep(0, p), 
+                       Sigma = autocorr.mat(p, rho), empirical = TRUE)
 #     
 
-     x.train <- rmvnorm(n = n, mean = rep(0, p), 
-                         sigma = autocorr.mat(p, rho))
+#      x.train <- rmvnorm(n = n, mean = rep(0, p), 
+#                          sigma = autocorr.mat(p, rho))
 
     
     
@@ -684,14 +684,21 @@ generate.shrink <- function(S, n, rho) {
     
     #this y works too
 
-#     y.train <- mvrnorm(n = 1, mu = x.train %*% beta.truth, 
-#         Sigma = diag(noise, nrow = n))
+     y.train <- mvrnorm(n = 1, mu = x.train %*% beta.truth, 
+         Sigma = diag(noise, nrow = n))
     
 #this is the y that I want
-   y.train <- t(rmvnorm(n = 1, mean = x.train %*% beta.truth, 
-        sigma = diag(noise, nrow = n)))
-
-    
+#    y.train <- t(rmvnorm(n = 1, mean = x.train %*% beta.truth, 
+#         sigma = diag(noise, nrow = n)))
+# 
+# 
+# x.test1 <- cbind(rep(1, p), x.test)
+# beta.truth1 <- rep(1, p + 1)
+# 
+# y.train1 <- t(rmvnorm(n = 1, mean = x.train1 %*% beta.truth1, 
+#                      sigma = diag(noise, nrow = n)))
+# 
+#     
 #### Model Estimation ####
 # estimate models
 
@@ -745,7 +752,7 @@ betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))[-1]
     
 #calculate the MSE of OLS, Lasso, and Ridge using the true betas
 
-beta.truth1 <- rep(1, p + 1)
+
 MSEOLS1 <- mean((betaHatOLS1 - beta.truth1) ^ 2)
 
 MSEOLS <- mean((betaHatOLS - beta.truth) ^ 2)
@@ -784,7 +791,6 @@ y.test <- t(rmvnorm(n = 1, mean = x.test %*% beta.truth,
 
 predOLS  <- x.test %*% betaHatOLS
 
-x.test1 <- cbind(rep(1, p), x.test)
 
 predOLS1  <- x.test1 %*% betaHatOLS1
 predLasso <- predict(fitLasso, s = cvLasso$lambda.1se, newx = x.test)
@@ -802,7 +808,7 @@ PERidge = mean((predRidge - y.test) ^ 2)
 
 dat.ls.pe <- rbind(dat.ls.pe, PEOLS)
 
-dat.ls.pe1 <- rbind(dat.ls.pe, PEOLS1)
+dat.ls.pe1 <- rbind(dat.ls.pe1, PEOLS1)
 
 dat.lasso.pe <- rbind(dat.lasso.pe, PELasso)
 
