@@ -617,14 +617,16 @@ noise <- 1
 #Create a function to find the variance-covariance matrix
 #that is based on rho
 
-autocorr.mat <- function(p, rho) {
-  mat <- diag(p)
+autocorr.mat <- function(n, rho) {
+  mat <- diag(n)
   return(rho ^ abs(row(mat) - col(mat)))
   
 }
 
 #create a function that finds the OLS, ridge, and lasso estimates and
 #calculates the MSE and prediction errors
+
+library(mvtnorm)
 
 
 generate <- function(S, n, rho) {
@@ -637,10 +639,17 @@ generate <- function(S, n, rho) {
   
   for (k in 1 : S) {
     
-    #here is how I can generate the X matrix
-    x.train <- mvrnorm(n = n, mu = rep(0, p), 
-              Sigma = autocorr.mat(p, rho), empirical = TRUE)
+    #here is how I can generate the X matrix using random numbers
+    
+    #this version should also be random
+#         x.train <- mvrnorm(n = n, mu = rep(0, p), 
+#                       Sigma = autocorr.mat(p, rho), empirical = TRUE)
+#     
 
+     x.train <- rmvnorm(n = n, mean = rep(0, p), 
+                         sigma = autocorr.mat(p, rho))
+
+    
     
     #then find the density of y (a vector)
     #based on the x matrix but I need to specify
