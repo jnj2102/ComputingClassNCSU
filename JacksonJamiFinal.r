@@ -982,6 +982,7 @@ for (i in names(n)){
 #Up next - do a final run with S = 100
 
 #Try using kable function to make a nice table from all of these lists
+#Dr. Zhou has an example in HW
 
 
 
