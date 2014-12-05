@@ -667,8 +667,8 @@ generate <- function(S, n, rho) {
 #         Sigma = diag(noise, nrow = n))
     
 #this is the y that I want
-   y.train <- rmvnorm(n = 1, mean = x.train %*% beta.truth, 
-        sigma = diag(noise, nrow = n))
+   y.train <- t(rmvnorm(n = 1, mean = x.train %*% beta.truth, 
+        sigma = diag(noise, nrow = n)))
 
     
     
