@@ -647,7 +647,7 @@ generate <- function(S, n, rho) {
     #my true betas here and my noise here too
     
     y.train <- dmvnorm(x.train, mean = x.train %*% beta.truth, 
-                 sigma = diag(noise, nrow = p), log = FALSE)
+                 sigma = diag(noise, nrow = n), log = FALSE)
     
     
     
