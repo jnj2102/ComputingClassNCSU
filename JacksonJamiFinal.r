@@ -714,8 +714,8 @@ y.train <- x.train %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 
 fitOLS  = glmnet(x.train, y.train, alpha = 0, lambda = 0,
                   intercept = FALSE)  #this is it!
-
-olsbeta = coef(fitOLS2)[-1]  #this is it!
+# 
+# olsbeta = coef(fitOLS2)[-1]  #this is it!
 
 
 
@@ -749,7 +749,7 @@ cvRidge = cv.glmnet(x.train, y.train, alpha = 0)
 
 # betaHatOLS = fitOLS$coefficients
 
-betaHatOLS = coef(fitOLS2)[-1] 
+betaHatOLS = coef(fitOLS)[-1] 
 
 # Lasso coefficient estimates 
 # s is lambda
