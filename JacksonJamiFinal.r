@@ -881,11 +881,16 @@ se.mean.PE.Lasso <- sqrt(var(dat.lasso.pe)/S)
 
 biglist.mean.MSEOLS <- list()
 
+biglist.mean.MSEOLS1 <- list()
+
 biglist.mean.MSERidge <- list()
 
 biglist.mean.MSELasso <- list()
 
 biglist.mean.PEOLS <- list()
+
+
+biglist.mean.PEOLS1 <- list()
 
 biglist.mean.PERidge <- list()
 
@@ -893,11 +898,16 @@ biglist.mean.PELasso <- list()
 
 biglist.se.MSEOLS <- list()
 
+biglist.se.MSEOLS1 <- list()
+
 biglist.se.MSERidge <- list()
 
 biglist.se.MSELasso <- list()
 
 biglist.se.PEOLS <- list()
+
+
+biglist.se.PEOLS1 <- list()
 
 biglist.se.PERidge <- list()
 
