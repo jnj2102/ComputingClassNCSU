@@ -730,6 +730,11 @@ MSEOLS = mean((betaHatOLS - beta.truth)^2)
 MSELasso = mean((betaHatLasso - beta.truth)^2)
 MSERidge = mean((betaHatRidge  - beta.truth)^2)
 
+dat.ls.mse <- rbind(dat.ls.mse, MSEOLS)
+
+dat.lasso.mse <- rbind(dat.lasso.mse, MSELasso)
+
+dat.ridge.mse <- rbind(dat.ridge.mse, MSERidge)
 
 # predOLS =  predict(fitOLS, 
 #                   newdata = as.data.frame(cbind(XTest, yTrain = yTest)))
