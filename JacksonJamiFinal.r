@@ -646,8 +646,8 @@ generate <- function(S, n, rho) {
     #based on the x matrix but I need to specify
     #my true betas here and my noise here too
     
-    y.train <- dmvnorm(x.train, mean = x.train %*% beta.truth, 
-                 sigma = diag(noise, nrow = n), log = FALSE)
+    y.train <- dmvnorm(x.train, mean = as.vector(x.train %*% beta.truth), 
+                sigma = diag(noise, nrow = n),  log = FALSE)
     
     
     
