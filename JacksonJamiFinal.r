@@ -590,7 +590,7 @@ for (i in names(I)){
 
 n <- list(50, 100, 200, 400)
 
-names(I) <- c("50", "100", "200", "400")
+names(n) <- c("50", "100", "200", "400")
 
 library(MASS)
 library(glmnet)
@@ -599,7 +599,7 @@ library(glmnet)
 
 rho <- list(0, 0.25, 0.5, 0.9)
 
-names(d) <- c("0", "0.25", "0.5", "0.9")
+names(rho) <- c("0", "0.25", "0.5", "0.9")
 
 #p the number of predictors is fixed 
 
@@ -862,25 +862,25 @@ biglist.se.PELasso <- list()
 
 #Code to make sure no combo has the same seed number.  There are no 
 #duplicates
-# 
- for (i in names(n)){
-        for (j in names(rho)){
-              print(((n[[i]] - 1) * 3 + (rho[[j]] - 1) * 11))
-          }
- }
-# 
-  for (i in names(n)){
-#     
-               print(n[[i]])
-# 
-  }
-# 
-# 
-   for (j in names(rho)){
-# 
-      print(rho[[j]])
-     }
-# 
+#  
+#  for (i in names(n)){
+#         for (j in names(rho)){
+#               print(((n[[i]] - 1) * 3 + (rho[[j]] - 1) * 11))
+#           }
+#  }
+#  
+#   for (i in names(n)){
+# #     
+#                print(n[[i]])
+# # 
+#   }
+# # 
+# # 
+#    for (j in names(rho)){
+# # 
+#       print(rho[[j]])
+#      }
+# # 
 
 
 
