@@ -896,11 +896,11 @@ for (i in names(n)){
         
     MeanMSELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanMSELasso)
     
-    MeanPELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanPELasso)
+    MeanPELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$meanPELasso)
     
-    MeanPERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanPERidge)
+    MeanPERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$meanPERidge)
     
-    MeanPEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanPEOLS)
+    MeanPEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$meanPEOLS)
     
     seMSEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$seMSEOLS)
     
@@ -979,12 +979,14 @@ for (i in names(n)){
   
 }  
 
-#Up next - do a final run with S = 100
+#I'm going to need to see how many S's I need for this question
+
+#Up next - do a final run with S = 100 (?)
 
 #Try using kable function to make a nice table from all of these lists
 #Dr. Zhou has an example in HW
 
-
+#give information on the functions I wrote and clean up my data
 
 
 
