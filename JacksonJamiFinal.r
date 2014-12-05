@@ -671,7 +671,16 @@ generate <- function(S, n, rho) {
         sigma = diag(noise, nrow = n)))
 
     
-    
+#### Model Estimation ####
+# estimate models
+
+fitOLS = lm(y.train ~ x.train)  # Ordinary Least Squares
+
+# glmnet automatically standardizes the predictors
+
+fitRidge = glmnet(x.train, y.train, alpha = 0)  # Ridge Regression
+
+fitLasso = glmnet(x.train, y.train, alpha = 1)  # The Lasso
 
     
     
