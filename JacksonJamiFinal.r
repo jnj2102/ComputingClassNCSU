@@ -601,6 +601,104 @@ rho <- list(0, 0.25, 0.5, 0.9)
 
 names(d) <- c("0", "0.25", "0.5", "0.9")
 
+
+#create a function that finds the OLS, ridge, and lasso estimates and
+#calculates the MSE and prediction errors
+
+
+generate <- function(S, I, d) {
+  
+  dat.MLE <- NULL
+  
+  dat.EB <- NULL
+  
+  for (k in 1 : S) {
+    
+    multi.param <- matrix(runif(I * d, min = 0, max = 1), nrow = I, 
+                          ncol = d)
+    
+    #I need to normalize the matrix of parameters.  This is my "TRUTH"
+    
+    final.multi.param <- multi.param/rowSums(multi.param)
+    
+    
+    matrix.counts <- t(apply(final.multi.param, 1, 
+                             function(x) rmultinom(n = 1, size = N,
+                                                   prob = x)))
+    
+    #find the MLE
+    
+    pi.MLE <- matrix.counts/N
+    
+    #Estimate the Dich-Mult parameter
+    
+    dirmult.alpha <- dirmultfit(matrix.counts, algorithm = 'Newton',
+                                tolfun = 1e-6, maxiters = 1000, display = FALSE)$estimate
+    
+    batchsize.alpha <- sum(dirmult.alpha)
+    
+    alpha.matrix <- t(replicate(dim(matrix.counts)[1], dirmult.alpha))
+    
+    #Get the empirical Bayes estimate
+    
+    pi.EB <- (matrix.counts + alpha.matrix) * 1/(N + batchsize.alpha)
+    
+    #Get the Estimation error for MLE
+    
+    ERR.MLE <- sum(rowSums(abs(pi.MLE - final.multi.param))) * 1/(2 * I)
+    
+    #Get the estimation error for EB
+    
+    ERR.EB <- sum(rowSums(abs(pi.EB - final.multi.param))) * 1/(2 * I)
+    
+    #Now I can combine each of these estimation errors for each replicate
+    #because I want to summarize the estimation errors, not anything else.
+    #I'm left with one big column vector after S replicates for ERR MLE and 
+    #ERR EB
+    
+    dat.EB <- rbind(dat.EB, ERR.EB)
+    dat.MLE <- rbind(dat.MLE, ERR.MLE)
+    
+    
+    
+  }
+  
+  #find the mean estimation error for EB and MLE
+  
+  mean.err.EB <- mean(dat.EB)
+  
+  mean.err.MLE <- mean(dat.MLE)
+  
+  #find the standard error of the mean estimation error for EB and MLE
+  
+  se.mean.err.EB <- sqrt(var(dat.EB)/S)
+  
+  se.mean.err.MLE <- sqrt(var(dat.MLE)/S)
+  
+  
+  #output the means and standard errors because this is my function
+  list(mean.EB = mean.err.EB, mean.MLE = mean.err.MLE, 
+       se.EB = se.mean.err.EB, se.MLE = se.mean.err.MLE)
+  
+  
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 #create the sigma matrix which is a function of rho
 autocorr.mat <- function(p = 100, rho = 0.9) {
   mat <- diag(p)
@@ -608,7 +706,7 @@ autocorr.mat <- function(p = 100, rho = 0.9) {
 }
 
 #here is how I can generate the X matrix
-out <- mvrnorm(50, mu = c(0,0), Sigma = matrix(c(1,0.56,0.56,1), ncol = 2),
+out <- mvrnorm(n = 50, mu = c(0,0), Sigma = matrix(c(1,0.56,0.56,1), ncol = 2),
                                empirical = TRUE)
 
 #then find the density of y based on the x matrix but I need to specify
