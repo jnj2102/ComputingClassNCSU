@@ -714,10 +714,14 @@ betaHatOLS = fitOLS$coefficients
 
 # Lasso coefficient estimates 
 # s is lambda
-betaHatLasso = as.double(coef(fitLasso, s = cvLasso$lambda.1se))  
+#remove the first row because it is the intercept row which is blank
+
+betaHatLasso = as.double(coef(fitLasso, s = cvLasso$lambda.1se))[-1]  
 
 # Ridge  coefficient estimates 
-betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))
+#remove the first row because it is the intercept row which is blank
+
+betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))[-1]
 
     
 #calculate the MSE of OLS, Lasso, and Ridge using the true betas
