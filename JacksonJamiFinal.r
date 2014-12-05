@@ -736,8 +736,27 @@ dat.lasso.mse <- rbind(dat.lasso.mse, MSELasso)
 
 dat.ridge.mse <- rbind(dat.ridge.mse, MSERidge)
 
-# predOLS =  predict(fitOLS, 
-#                   newdata = as.data.frame(cbind(XTest, yTrain = yTest)))
+#calculate the prediction errors of OLS, LAsso and Ridge using a new
+#test set for x and a new test set for y
+
+
+#generate a new x test set
+
+
+x.test <- rmvnorm(n = n, mean = rep(0, p), 
+                   sigma = autocorr.mat(p, rho))
+
+#generate a new y from the x test set
+
+y.test <- t(rmvnorm(n = 1, mean = x.test %*% beta.truth, 
+                     sigma = diag(noise, nrow = n)))
+
+# calculate predicted values
+
+predOLS =  predict(fitOLS, newdata = as.data.frame(x.test))
+
+predLasso = predict(fitLasso, s = cvLasso$lambda.1se, newx = x.test)
+predRidge = predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
     
     
     
