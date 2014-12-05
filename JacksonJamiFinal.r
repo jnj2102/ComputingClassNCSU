@@ -375,7 +375,7 @@ generate <- function(S, I, d) {
   dat.MLE <- rbind(dat.MLE, ERR.MLE)
  
   
-
+print(k)
 }
 
 #find the mean estimation error for EB and MLE
@@ -508,18 +508,18 @@ for (i in names(I)){
     
     #MLE.se[name] <- list(sqrt(MLE.var/S))
      
-    #output
+    #output()
   biglist.mean.EB
   biglist.mean.MLE
   biglist.se.EB
   biglist.se.MLE
 
-    
+    print(j)
     
 
   }
 
- 
+ print(i)
 }  
   
 
@@ -634,7 +634,7 @@ library(mvtnorm)
 #MLE by running the below code with different values of S
 
 # S <- 3
-# S <- 100
+ S <- 100
 
 #Based on all standard errors being <= 0.005, I choose S = 
 
@@ -768,11 +768,11 @@ betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))[-1]
 
 # MSEOLS1 <- mean((betaHatOLS1 - beta.truth1) ^ 2)
 
-MSEOLS <- mean((betaHatOLS - beta.truth) ^ 2)
+MSEOLS <- sqrt(mean((betaHatOLS - beta.truth) ^ 2))
 
 
-MSELasso <- mean((betaHatLasso - beta.truth) ^ 2)
-MSERidge <- mean((betaHatRidge  - beta.truth) ^ 2)
+MSELasso <- sqrt(mean((betaHatLasso - beta.truth) ^ 2))
+MSERidge <- sqrt(mean((betaHatRidge  - beta.truth) ^ 2))
 
 dat.ls.mse <- rbind(dat.ls.mse, MSEOLS)
 # 
@@ -821,13 +821,13 @@ predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
     
 
 # calculate test set prediction errors
-PEOLS = mean((predOLS - y.test) ^ 2)
+PEOLS = sqrt(mean((predOLS - y.test) ^ 2))
 
 # 
 # PEOLS1 = mean((predOLS1 - y.test) ^ 2)
 
-PELasso = mean((predLasso - y.test) ^ 2)
-PERidge = mean((predRidge - y.test) ^ 2)
+PELasso = sqrt(mean((predLasso - y.test) ^ 2))
+PERidge = sqrt(mean((predRidge - y.test) ^ 2))
 
 
 dat.ls.pe <- rbind(dat.ls.pe, PEOLS)
@@ -848,6 +848,7 @@ dat.ridge.pe <- rbind(dat.ridge.pe, PERidge)
 # PELasso.stan = mean((predLasso - y.test.stand) ^ 2)
 # PERidge.stan = mean((predRidge - y.test.stand) ^ 2)
 
+print(k)
     
   }
   
@@ -1058,12 +1059,14 @@ for (i in names(n)){
     
     
     
-    
+    print(j)
     
   }
-  
+  print(i)
   
 }  
+
+totalfile <- save.image(file="Allproject.rdata")
 
 #I'm going to need to see how many S's I need for this question
 
