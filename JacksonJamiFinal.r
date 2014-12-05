@@ -892,7 +892,29 @@ for (i in names(n)){
     
     MeanMSEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanMSEOLS)
     
-    meanMLE <- list(generate(S, I[[i]], d[[j]])$mean.MLE)
+    MeanMSERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanMSERidge)
+        
+    MeanMSELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanMSELasso)
+    
+    MeanPELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanPELasso)
+    
+    MeanPERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanPERidge)
+    
+    MeanPEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanPEOLS)
+    
+    seMSEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$seMSEOLS)
+    
+    seMSERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$seMSERidge)
+    
+    seMSELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$seMSELasso)
+        
+    sePEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$sePEOLS)
+    
+    sePERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$sePERidge)
+    
+    sePELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$sePELasso)
+    
+    
     
     name <- paste('item:', (I[[i]] - 1) * 3 + (d[[j]] - 1) * 11, sep = '')
     
