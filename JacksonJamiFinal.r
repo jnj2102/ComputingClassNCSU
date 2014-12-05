@@ -660,13 +660,15 @@ generate <- function(S, n, rho) {
     #covariance
     #matrix so it has to be pxp matrix (not the usual NxN matrix)
     
-    #this is the y that I want
-    y.train <- mvrnorm(n = 1, mu = x.train %*% beta.truth, 
-        Sigma = diag(noise, nrow = n))
     
-#     y.train <- dmvnorm(x.train, mean = beta.truth, 
-#                 sigma = diag(noise, nrow = p),  log = FALSE)
+    #this y works too
+
+#     y.train <- mvrnorm(n = 1, mu = x.train %*% beta.truth, 
+#         Sigma = diag(noise, nrow = n))
     
+#this is the y that I want
+   y.train <- rmvnorm(n = 1, mean = x.train %*% beta.truth, 
+        sigma = diag(noise, nrow = n))
 
     
     
