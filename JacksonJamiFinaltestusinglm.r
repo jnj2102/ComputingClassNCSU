@@ -687,8 +687,8 @@ generate.shrink <- function(S, n, rho) {
     #here is how I can generate the X matrix using random numbers
     
     #this version should also be random
-#     x.train.m <- mvrnorm(n = n, mu = rep(0, p - 1), 
-#                        Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+     x.train.m <- mvrnorm(n = n, mu = rep(0, p - 1), 
+                        Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
     
 #           x.train.m <- rmvnorm(n = n, mean = rep(0, p - 1), 
 #                               sigma = autocorr.mat(p - 1, rho))
@@ -698,13 +698,17 @@ generate.shrink <- function(S, n, rho) {
     #observations using either mvrnorm or rmvnorm.  I'm going to make
     # a loop of size n to get 1 observation n times
     
-    x.train.m <- matrix(NA, nrow = n, ncol = p - 1)
+    x.train.m <- NULL
     
     for (u in 1 : n) {
-    x.train.loop <- mvrnorm(n = 1, mu = rep(0, p - 1), 
-              Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+    x.train.loop <- rmvnorm(n = 1, mean = rep(0, p - 1), 
+              sigma = autocorr.mat(p - 1, rho))
     
-    x.train.m <- cbind(x.train.m, x.train.loop)
+    #don't know why this doesnt want to work
+#     x.train.loop1 <- mvrnorm(n = 1, mu = rep(0, p - 1), 
+#                 Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+    
+    x.train.m <- rbind(x.train.m, x.train.loop)
     
   }
     
