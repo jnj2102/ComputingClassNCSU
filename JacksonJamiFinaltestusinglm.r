@@ -691,30 +691,30 @@ generate.shrink <- function(S, n, rho) {
 #                         Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
      
     #try this way
-     x.train.m <- mvrnorm(n = p, mu = rep(0, n - 1), 
-                      Sigma = autocorr.mat(n - 1, rho), empirical = TRUE)
-    
-#           x.train.m <- rmvnorm(n = n, mean = rep(0, p - 1), 
-#                               sigma = autocorr.mat(p - 1, rho))
+#      x.train.m <- mvrnorm(n = p, mu = rep(0, n - 1), 
+#                       Sigma = autocorr.mat(n - 1, rho), empirical = TRUE)
+#     
+          x.train.m <- t(rmvnorm(n = p, mean = rep(0, n ), 
+                               sigma = autocorr.mat(n , rho)))
     
     
 #for some reason, I am getting singular matrices when I ask for n 
     #observations using either mvrnorm or rmvnorm.  I'm going to make
     # a loop of size n to get 1 observation n times
-    
-    x.train.m <- NULL
-    
-    for (i in 1 : (p - 1)) {
-    x.train.loop <- t(rmvnorm(n = 1, mean = rep(0, n), 
-              sigma = autocorr.mat(n , rho)))
-    
-    #don't know why this doesnt want to work
-#     x.train.loop1 <- mvrnorm(n = 1, mu = rep(0, p - 1), 
-#                 Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
-    
-    x.train.m <- cbind(x.train.m, x.train.loop)
-    
-  }
+#     
+#     x.train.m <- NULL
+#     
+#     for (i in 1 : (p - 1)) {
+#     x.train.loop <- t(rmvnorm(n = 1, mean = rep(0, n), 
+#               sigma = autocorr.mat(n , rho)))
+#     
+#     #don't know why this doesnt want to work
+# #     x.train.loop1 <- mvrnorm(n = 1, mu = rep(0, p - 1), 
+# #                 Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+#     
+#     x.train.m <- cbind(x.train.m, x.train.loop)
+#     
+#   }
     
     x.train <- cbind(rep(1, n), x.train.m)
     
