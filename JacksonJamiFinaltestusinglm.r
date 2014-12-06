@@ -704,7 +704,7 @@ generate.shrink <- function(S, n, rho) {
     
     x.train.m <- NULL
     
-    for (u in 1 : p - 1) {
+    for (i in 1 : (p - 1)) {
     x.train.loop <- t(rmvnorm(n = 1, mean = rep(0, n), 
               sigma = autocorr.mat(n , rho)))
     
