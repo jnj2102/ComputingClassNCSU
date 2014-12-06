@@ -687,15 +687,15 @@ generate.shrink <- function(S, n, rho) {
     #here is how I can generate the X matrix using random numbers
     
     #this version should also be random
-#      x.train.m <- mvrnorm(n = n, mu = rep(0, p - 1), 
-#                         Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+      x.train.m <- mvrnorm(n = n, mu = rep(0, p - 1), 
+                         Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
      
     #try this way
 #      x.train.m <- mvrnorm(n = p, mu = rep(0, n - 1), 
 #                       Sigma = autocorr.mat(n - 1, rho), empirical = TRUE)
 #     
-          x.train.m <- t(rmvnorm(n = p, mean = rep(0, n ), 
-                               sigma = autocorr.mat(n , rho)))
+#           x.train.m <- t(rmvnorm(n = p - 1, mean = rep(0, n ), 
+#                                sigma = autocorr.mat(n , rho)))
     
     
 #for some reason, I am getting singular matrices when I ask for n 
@@ -768,7 +768,9 @@ y.train <- x.train %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 
 #will fit the intercept
 
-fitOLS = lm(y.train ~  x.train) 
+#fitOLS = lm(y.train ~  x.train) 
+
+fitOLS = lm(y.train ~  x.train.m) 
 # 
 #  fitOLS <- lm(y.train ~  0 + x.train)
 
@@ -809,7 +811,7 @@ cvRidge = cv.glmnet(x.train, y.train, alpha = 0)
 
 # betaHatOLS = fitOLS$coefficients
 
-# betaHatOLS = coef(fitOLS)[-1] 
+ betaHatOLS1 = coef(fitOLS)[-1] 
 
 betaHatOLS = coef(fitOLS)
 
