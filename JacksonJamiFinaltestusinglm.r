@@ -752,6 +752,8 @@ generate.shrink <- function(S, n, rho) {
 
 y.train <- x.train %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 
+# y.train.m <- x.train.m %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
+
 # x.test1 <- cbind(rep(1, p), x.test)
 # beta.truth1 <- rep(1, p + 1)
 # 
@@ -770,6 +772,9 @@ y.train <- x.train %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 
 #fitOLS = lm(y.train ~  x.train) 
 
+#since the intercept is implied, it doesn't have to be included in the
+#data matrix
+
 fitOLS = lm(y.train ~  x.train.m) 
 # 
 #  fitOLS <- lm(y.train ~  0 + x.train)
@@ -783,24 +788,31 @@ fitOLS = lm(y.train ~  x.train.m)
 
 # glmnet automatically standardizes the predictors
 # Ridge Regression. No intercept
+# 
+# fitRidge = glmnet(x.train, y.train, alpha = 0, intercept = TRUE)
 
 fitRidge = glmnet(x.train.m, y.train, alpha = 0, intercept = TRUE)
 
 # The Lasso. No intercept
 
-fitLasso = glmnet(x.train, y.train, alpha = 1, intercept = TRUE) 
+# fitLasso = glmnet(x.train, y.train, alpha = 1, intercept = TRUE) 
 
-    
+
+fitLasso = glmnet(x.train.m, y.train, alpha = 1, intercept = TRUE)     
     
 
 #### Model Selection ####
 
 # (10-fold) cross validation for the Lasso
+# 
+# cvLasso = cv.glmnet(x.train, y.train, alpha = 1)
 
-cvLasso = cv.glmnet(x.train, y.train, alpha = 1)
+cvLasso = cv.glmnet(x.train.m, y.train, alpha = 1)
 
 
 # (10-fold) cross validation for Ridge Regression
+# cvRidge = cv.glmnet(x.train, y.train, alpha = 0)
+
 cvRidge = cv.glmnet(x.train.m, y.train, alpha = 0)
 
 
@@ -819,13 +831,17 @@ betaHatOLS = coef(fitOLS)
 # s is lambda
 #remove the first row because it is the intercept row which is blank
 
-betaHatLasso = as.double(coef(fitLasso, s = cvLasso$lambda.1se))[-1]  
+# betaHatLasso = as.double(coef(fitLasso, s = cvLasso$lambda.1se))[-1]  
+
+betaHatLasso = as.double(coef(fitLasso, s = cvLasso$lambda.1se))
 
 # Ridge  coefficient estimates 
 #remove the first row because it is the intercept row which is blank
+# 
+# betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))[-1]
 
-betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))[-1]
 
+betaHatRidge = as.double(coef(fitRidge, s = cvRidge$lambda.1se))
     
 #calculate the MSE of OLS, Lasso, and Ridge using the true betas
 
@@ -858,8 +874,13 @@ dat.ridge.mse <- rbind(dat.ridge.mse, MSERidge)
 #                     sigma = autocorr.mat(p, rho))
 
 # 
- x.test <- mvrnorm(n = n, mu = rep(0, p), 
-                        Sigma = autocorr.mat(p, rho), empirical = TRUE)
+#  x.test <- mvrnorm(n = n, mu = rep(0, p), 
+#                         Sigma = autocorr.mat(p, rho), empirical = TRUE)
+
+x.test.m <- mvrnorm(n = n, mu = rep(0, p - 1), 
+                  Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+
+x.test <- cbind(rep(1, n), x.test.m)
                   
 #generate a new y from the x test set
 
