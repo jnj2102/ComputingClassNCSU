@@ -629,6 +629,8 @@ p <- 50
 
 #My truth beta estimates are fixed since I fix p
 
+# one intercept and p-1 predictors
+
 beta.truth <- rep(1, 50)
 
 #I am keeping my noise factor fixed and constant 
@@ -685,8 +687,32 @@ generate.shrink <- function(S, n, rho) {
     #here is how I can generate the X matrix using random numbers
     
     #this version should also be random
-         x.train <- mvrnorm(n = n, mu = rep(0, p), 
-                       Sigma = autocorr.mat(p, rho), empirical = TRUE)
+#     x.train.m <- mvrnorm(n = n, mu = rep(0, p - 1), 
+#                        Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+    
+#           x.train.m <- rmvnorm(n = n, mean = rep(0, p - 1), 
+#                               sigma = autocorr.mat(p - 1, rho))
+    
+    
+#for some reason, I am getting singular matrices when I ask for n 
+    #observations using either mvrnorm or rmvnorm.  I'm going to make
+    # a loop of size n to get 1 observation n times
+    
+    x.train.m <- matrix(NA, nrow = n, ncol = p - 1)
+    
+    for (u in 1 : n) {
+    x.train.loop <- mvrnorm(n = 1, mu = rep(0, p - 1), 
+              Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+    
+    x.train.m <- cbind(x.train.m, x.train.loop)
+    
+  }
+    
+    x.train <- cbind(rep(1, n), x.train.m)
+    
+    
+#          x.train <- mvrnorm(n = n, mu = rep(0, p), 
+#                        Sigma = autocorr.mat(p, rho), empirical = TRUE)
 #     
 
 #      x.train <- rmvnorm(n = n, mean = rep(0, p), 
@@ -730,13 +756,17 @@ y.train <- x.train %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 
 # Ordinary Least Squares. No intercept
 # 
-#  fitOLS = lm(y.train ~ 0 + x.train) 
-# 
- fitOLS <- lm(y.train ~  0 + x.train)
+#   fitOLS = lm(y.train ~ 0 + x.train) 
 
- fitOLS  = glmnet(x.train, y.train, alpha = 0, lambda = 0,
-                   intercept = FALSE)  #this is it!
-# # 
+#will fit the intercept
+
+fitOLS = lm(y.train ~  x.train) 
+# 
+#  fitOLS <- lm(y.train ~  0 + x.train)
+
+#  fitOLS  = glmnet(x.train, y.train, alpha = 0, lambda = 0,
+#                    intercept = FALSE)  #this is it!
+# # # 
 # olsbeta = coef(fitOLS2)[-1]  #this is it!
 
 
@@ -744,11 +774,11 @@ y.train <- x.train %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 # glmnet automatically standardizes the predictors
 # Ridge Regression. No intercept
 
-fitRidge = glmnet(x.train, y.train, alpha = 0, intercept = FALSE)
+fitRidge = glmnet(x.train, y.train, alpha = 0, intercept = TRUE)
 
 # The Lasso. No intercept
 
-fitLasso = glmnet(x.train, y.train, alpha = 1, intercept = FALSE) 
+fitLasso = glmnet(x.train, y.train, alpha = 1, intercept = TRUE) 
 
     
     
