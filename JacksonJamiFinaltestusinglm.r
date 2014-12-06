@@ -784,7 +784,7 @@ fitOLS = lm(y.train ~  x.train.m)
 # glmnet automatically standardizes the predictors
 # Ridge Regression. No intercept
 
-fitRidge = glmnet(x.train, y.train, alpha = 0, intercept = TRUE)
+fitRidge = glmnet(x.train.m, y.train, alpha = 0, intercept = TRUE)
 
 # The Lasso. No intercept
 
@@ -801,7 +801,7 @@ cvLasso = cv.glmnet(x.train, y.train, alpha = 1)
 
 
 # (10-fold) cross validation for Ridge Regression
-cvRidge = cv.glmnet(x.train, y.train, alpha = 0)
+cvRidge = cv.glmnet(x.train.m, y.train, alpha = 0)
 
 
 ### Extract Coefficients ###
@@ -811,7 +811,7 @@ cvRidge = cv.glmnet(x.train, y.train, alpha = 0)
 
 # betaHatOLS = fitOLS$coefficients
 
- betaHatOLS1 = coef(fitOLS)[-1] 
+#  betaHatOLS1 = coef(fitOLS)[-1] 
 
 betaHatOLS = coef(fitOLS)
 
