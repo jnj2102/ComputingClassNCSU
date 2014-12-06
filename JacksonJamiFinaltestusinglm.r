@@ -687,8 +687,12 @@ generate.shrink <- function(S, n, rho) {
     #here is how I can generate the X matrix using random numbers
     
     #this version should also be random
-     x.train.m <- mvrnorm(n = n, mu = rep(0, p - 1), 
-                        Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+#      x.train.m <- mvrnorm(n = n, mu = rep(0, p - 1), 
+#                         Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
+     
+    #try this way
+     x.train.m <- mvrnorm(n = p, mu = rep(0, n - 1), 
+                      Sigma = autocorr.mat(n - 1, rho), empirical = TRUE)
     
 #           x.train.m <- rmvnorm(n = n, mean = rep(0, p - 1), 
 #                               sigma = autocorr.mat(p - 1, rho))
