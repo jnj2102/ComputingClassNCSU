@@ -490,13 +490,16 @@ for (i in names(I)){
   for (j in names(d)){
  #   print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
     set.seed((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11)
-
     
-    meanEB <- list(generate(S, I[[i]], d[[j]])$mean.EB)
-    
-    meanMLE <- list(generate(S, I[[i]], d[[j]])$mean.MLE)
+    #generate one treatment combo
 
-   ttest <- list(generate(S, I[[i]], d[[j]])$t.test)
+    one.combo <- generate(S, I[[i]], d[[j]])
+    
+    meanEB <- list(one.combo$mean.EB)
+    
+    meanMLE <- list(one.combo$mean.MLE)
+
+   ttest <- list(one.combo$t.test)
     
     name <- paste('item:', (I[[i]] - 1) * 3 + (d[[j]] - 1) * 11, sep = '')
     
