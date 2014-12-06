@@ -509,11 +509,11 @@ for (i in names(I)){
 
  biglist.ttest[[name]] <- ttest
     
-    seMLE <- list(generate(S, I[[i]], d[[j]])$se.MLE)
+    seMLE <- list(one.combo$se.MLE)
     
     biglist.se.MLE[[name]] <- seMLE
     
-    seEB <- list(generate(S, I[[i]], d[[j]])$se.EB)
+    seEB <- list(one.combo$se.EB)
     
     biglist.se.EB[[name]] <- seEB
     
@@ -656,7 +656,7 @@ library(mvtnorm)
 #MLE by running the below code with different values of S
 
 # S <- 3
- S <- 2000
+ S <- 500
 
 #Based on all standard errors being <= 0.005, I choose S = 
 
@@ -1000,30 +1000,31 @@ for (i in names(n)){
     #   print(typeof((I[[i]] - 1) * 3 + (d[[j]] - 1) * 11))
     set.seed((n[[i]] - 1) * 3 + (rho[[j]] - 1) * 11)
     
+    one.combo <- generate.shrink(S, n[[i]], rho[[j]])
     
-    MeanMSEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanMSEOLS)
+    MeanMSEOLS <- list(one.combo$MeanMSEOLS)
     
-    MeanMSERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanMSERidge)
+    MeanMSERidge <- list(one.combo$MeanMSERidge)
         
-    MeanMSELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$MeanMSELasso)
+    MeanMSELasso <- list(one.combo$MeanMSELasso)
     
-    MeanPELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$meanPELasso)
+    MeanPELasso <- list(one.combo$meanPELasso)
     
-    MeanPERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$meanPERidge)
+    MeanPERidge <- list(one.combo$meanPERidge)
     
-    MeanPEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$meanPEOLS)
+    MeanPEOLS <- list(one.combo$meanPEOLS)
     
-    seMSEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$seMSEOLS)
+    seMSEOLS <- list(one.combo$seMSEOLS)
     
-    seMSERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$seMSERidge)
+    seMSERidge <- list(one.combo$seMSERidge)
     
-    seMSELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$seMSELasso)
+    seMSELasso <- list(one.combo$seMSELasso)
         
-    sePEOLS <- list(generate.shrink(S, n[[i]], rho[[j]])$sePEOLS)
+    sePEOLS <- list(one.combo$sePEOLS)
     
-    sePERidge <- list(generate.shrink(S, n[[i]], rho[[j]])$sePERidge)
+    sePERidge <- list(one.combo$sePERidge)
     
-    sePELasso <- list(generate.shrink(S, n[[i]], rho[[j]])$sePELasso)
+    sePELasso <- list(one.combo$sePELasso)
     
         
    name <- paste('item:', (n[[i]] - 1)*3 + (rho[[j]] - 1)*11, sep = '')
