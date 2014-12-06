@@ -734,8 +734,8 @@ y.train <- x.train %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 # 
  fitOLS <- lm(y.train ~  0 + x.train)
 
-# fitOLS  = glmnet(x.train, y.train, alpha = 0, lambda = 0,
-#                   intercept = FALSE)  #this is it!
+ fitOLS  = glmnet(x.train, y.train, alpha = 0, lambda = 0,
+                   intercept = FALSE)  #this is it!
 # # 
 # olsbeta = coef(fitOLS2)[-1]  #this is it!
 
@@ -773,7 +773,7 @@ cvRidge = cv.glmnet(x.train, y.train, alpha = 0)
 
 # betaHatOLS = coef(fitOLS)[-1] 
 
-betaHatOLS = coef(fitOLS)[-1] 
+betaHatOLS = coef(fitOLS)
 
 # Lasso coefficient estimates 
 # s is lambda
@@ -874,6 +874,7 @@ dat.ridge.pe <- rbind(dat.ridge.pe, PERidge)
 # PERidge.stan = mean((predRidge - y.test.stand) ^ 2)
 
 print(k)
+
     
   }
   
@@ -1095,6 +1096,8 @@ for (i in names(n)){
 
 # Stop the clock
 proc.time() - ptm2
+
+warnings()
 
 totalfile <- save.image(file = "Allproject5.rdata")
 
