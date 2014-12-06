@@ -704,15 +704,15 @@ generate.shrink <- function(S, n, rho) {
     
     x.train.m <- NULL
     
-    for (u in 1 : n) {
-    x.train.loop <- rmvnorm(n = 1, mean = rep(0, p - 1), 
-              sigma = autocorr.mat(p - 1, rho))
+    for (u in 1 : p - 1) {
+    x.train.loop <- t(rmvnorm(n = 1, mean = rep(0, n), 
+              sigma = autocorr.mat(n , rho)))
     
     #don't know why this doesnt want to work
 #     x.train.loop1 <- mvrnorm(n = 1, mu = rep(0, p - 1), 
 #                 Sigma = autocorr.mat(p - 1, rho), empirical = TRUE)
     
-    x.train.m <- rbind(x.train.m, x.train.loop)
+    x.train.m <- cbind(x.train.m, x.train.loop)
     
   }
     
