@@ -901,8 +901,8 @@ y.test <- x.test %*% beta.truth + noise * rnorm(1, mean = 0, sd = 1)
 predOLS = predict(fitOLS, as.data.frame(x.test))  #this is it!
 
 # predOLS1  <- x.test1 %*% betaHatOLS1
-predLasso <- predict(fitLasso, s = cvLasso$lambda.1se, newx = x.test)
-predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test)
+predLasso <- predict(fitLasso, s = cvLasso$lambda.1se, newx = x.test.m)
+predRidge <- predict(fitRidge, s = cvRidge$lambda.1se, newx = x.test.m)
     
     
 
